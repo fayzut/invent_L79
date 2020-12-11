@@ -6,7 +6,7 @@ import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem
 
-DB_Name = ''
+DB_Name = 'inventarizaciya10.db'
 
 
 # import db_view
@@ -33,7 +33,7 @@ class DBViewWindow(QWidget):
         uic.loadUi('db_view.ui', self)
         con = sqlite3.connect(DB_Name)
         cur = con.cursor()
-        result = cur.execute("""SELECT * FROM opis""").fetchall()
+        result = cur.execute("""SELECT * FROM goods""").fetchall()
         self.tableWidget.setColumnCount(len(result[0]))
         self.tableWidget.setRowCount(0)
         # Заполняем таблицу элементами
