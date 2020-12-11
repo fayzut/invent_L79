@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="34d2e243-b1cf-4a2c-bf4f-c39b56b861f3" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/Year2_attest$probe.coverage" NAME="probe Coverage Results" MODIFIED="1597665542219" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+    <SUITE FILE_PATH="coverage/Year2_attest$pyqt_webinar_1_2.coverage" NAME="pyqt-webinar_1_2 Coverage Results" MODIFIED="1597151322702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+    <SUITE FILE_PATH="coverage/Year2_attest$big_calc.coverage" NAME="big_calc Coverage Results" MODIFIED="1597666034577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson5_QT2" />
+    <SUITE FILE_PATH="coverage/Year2_attest$melody.coverage" NAME="melody Coverage Results" MODIFIED="1596777720564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lesson3_classes" />
+    <SUITE FILE_PATH="coverage/Year2_attest$a_tick.coverage" NAME="a_tick Coverage Results" MODIFIED="1597035746052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lesson3_classes" />
+    <SUITE FILE_PATH="coverage/Year2_attest$SQLLite_webinar_2.coverage" NAME="SQLLite_webinar_2 Coverage Results" MODIFIED="1597649149825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+    <SUITE FILE_PATH="coverage/Year2_attest$paintings.coverage" NAME="paintings Coverage Results" MODIFIED="1597152610985" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+    <SUITE FILE_PATH="coverage/Year2_attest$pyqt_webinar.coverage" NAME="pyqt-webinar Coverage Results" MODIFIED="1597147657771" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+    <SUITE FILE_PATH="coverage/Year2_attest$NumberGame.coverage" NAME="NumberGame Coverage Results" MODIFIED="1597049246523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson4_PyQT" />
+    <SUITE FILE_PATH="coverage/Year2_attest$mini_calc.coverage" NAME="mini_calc Coverage Results" MODIFIED="1597127353819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson4_PyQT" />
+    <SUITE FILE_PATH="coverage/Year2_attest$SQLite_webinar_2_1.coverage" NAME="SQLite_webinar_2_1 Coverage Results" MODIFIED="1597659989236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Webinars" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="JupyterTrust" id="56a29cd3-7404-4a5c-a793-47d10d781c62" />
+  <component name="ProjectId" id="1gEj0mNgE76mTbFQEna7xNDnDpK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SearchEverywhereHistoryKey" value="Restoredefault&#9;ACTION&#9;RestoreDefaultLayout&#10;restore default settings&#9;null&#9;null" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\DersTakip 2017-2018\OneDriveWork\OneDrive\Year2_attest\Webinars" />
+      <recent name="G:\DersTakip 2017-2018\OneDriveWork\OneDrive\Year2_attest" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\DersTakip 2017-2018\OneDriveWork\OneDrive\Year2_attest\Webinars" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.check">
+    <configuration name="111" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Year2_attest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lesson1_povtor" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lesson1_povtor/111.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="MyNotePad" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Year2_attest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lesson6_QT3" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lesson6_QT3/MyNotePad.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="check" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Year2_attest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lesson3_classes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/lesson3_classes/check.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="diary" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Year2_attest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lesson5_QT2" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lesson5_QT2/diary.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="rand_line_from_file" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Year2_attest" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Lesson6_QT3" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Lesson6_QT3/rand_line_from_file.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.diary" />
+      <item itemvalue="Python.MyNotePad" />
+      <item itemvalue="Python.rand_line_from_file" />
+      <item itemvalue="Python.111" />
+      <item itemvalue="Python.check" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.check" />
+        <item itemvalue="Python.111" />
+        <item itemvalue="Python.rand_line_from_file" />
+        <item itemvalue="Python.MyNotePad" />
+        <item itemvalue="Python.diary" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="34d2e243-b1cf-4a2c-bf4f-c39b56b861f3" name="Default Changelist" comment="" />
+      <created>1595856234505</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1595856234505</updated>
+      <workItem from="1595856263723" duration="18956000" />
+      <workItem from="1596118670543" duration="22697000" />
+      <workItem from="1597686437125" duration="5119000" />
+      <workItem from="1597729015560" duration="10325000" />
+      <workItem from="1597815323040" duration="2763000" />
+      <workItem from="1599115041027" duration="1776000" />
+      <workItem from="1600353425852" duration="2047000" />
+      <workItem from="1600697406597" duration="108000" />
+      <workItem from="1601227333668" duration="1222000" />
+      <workItem from="1603086129158" duration="1637000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="867" y="123" key="#xdebugger.evaluate" timestamp="1597689276177">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="867" y="123" key="#xdebugger.evaluate/0.0.1536.824@0.0.1536.824" timestamp="1597689276177" />
+    <state x="506" y="110" key="FileChooserDialogImpl" timestamp="1601228346461">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="506" y="110" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1601228346461" />
+    <state x="633" y="133" key="FileChooserDialogImpl/0.0.1920.999/-1280.0.1280.984@0.0.1920.999" timestamp="1600697439560" />
+    <state x="633" y="133" key="FileChooserDialogImpl/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597729253357" />
+    <state width="1853" height="139" key="GridCell.Tab.0.bottom" timestamp="1600355818904">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1597722123198" />
+    <state width="1853" height="139" key="GridCell.Tab.0.bottom/0.0.1920.999/-1280.0.1280.984@0.0.1920.999" timestamp="1600355818904" />
+    <state width="1853" height="237" key="GridCell.Tab.0.bottom/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597826491958" />
+    <state width="957" height="147" key="GridCell.Tab.0.bottom/0.0.1920.999/1920.0.1024.728/-1024.0.1024.728@1920.0.1024.728" timestamp="1599140858888" />
+    <state width="1853" height="139" key="GridCell.Tab.0.center" timestamp="1600355818904">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1597722123198" />
+    <state width="1853" height="139" key="GridCell.Tab.0.center/0.0.1920.999/-1280.0.1280.984@0.0.1920.999" timestamp="1600355818904" />
+    <state width="1853" height="237" key="GridCell.Tab.0.center/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597826491958" />
+    <state width="957" height="147" key="GridCell.Tab.0.center/0.0.1920.999/1920.0.1024.728/-1024.0.1024.728@1920.0.1024.728" timestamp="1599140858888" />
+    <state width="1853" height="139" key="GridCell.Tab.0.left" timestamp="1600355818904">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1597722123198" />
+    <state width="1853" height="139" key="GridCell.Tab.0.left/0.0.1920.999/-1280.0.1280.984@0.0.1920.999" timestamp="1600355818904" />
+    <state width="1853" height="237" key="GridCell.Tab.0.left/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597826491958" />
+    <state width="957" height="147" key="GridCell.Tab.0.left/0.0.1920.999/1920.0.1024.728/-1024.0.1024.728@1920.0.1024.728" timestamp="1599140858887" />
+    <state width="1853" height="139" key="GridCell.Tab.0.right" timestamp="1600355818904">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1597722123198" />
+    <state width="1853" height="139" key="GridCell.Tab.0.right/0.0.1920.999/-1280.0.1280.984@0.0.1920.999" timestamp="1600355818904" />
+    <state width="1853" height="237" key="GridCell.Tab.0.right/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597826491958" />
+    <state width="957" height="147" key="GridCell.Tab.0.right/0.0.1920.999/1920.0.1024.728/-1024.0.1024.728@1920.0.1024.728" timestamp="1599140858888" />
+    <state width="1853" height="293" key="GridCell.Tab.1.bottom" timestamp="1597757485499">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1853" height="293" key="GridCell.Tab.1.bottom/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597757485499" />
+    <state width="1853" height="293" key="GridCell.Tab.1.center" timestamp="1597757485499">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1853" height="293" key="GridCell.Tab.1.center/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597757485499" />
+    <state width="1853" height="293" key="GridCell.Tab.1.left" timestamp="1597757485499">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1853" height="293" key="GridCell.Tab.1.left/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597757485499" />
+    <state width="1853" height="293" key="GridCell.Tab.1.right" timestamp="1597757485499">
+      <screen x="0" y="0" width="1920" height="999" />
+    </state>
+    <state width="1853" height="293" key="GridCell.Tab.1.right/0.0.1920.999/-1360.0.1360.728@0.0.1920.999" timestamp="1597757485499" />
+    <state width="189" height="457" key="HiddenNamespacesPopup" timestamp="1597691256391">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="189" height="457" key="HiddenNamespacesPopup/0.0.1536.824@0.0.1536.824" timestamp="1597691256391" />
+    <state x="279" y="58" key="SettingsEditor" timestamp="1601227976185">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="279" y="58" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1601227976185" />
+    <state x="477" y="241" key="com.intellij.ide.util.TipDialog" timestamp="1601227952508">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="477" y="241" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1601227952508" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Lesson4_PyQT/NumberGame.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Lesson4_PyQT/mini_calc.py</url>
+          <line>45</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Year2_attest$MyNotePad.coverage" NAME="MyNotePad Coverage Results" MODIFIED="1597816662074" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson6_QT3" />
+    <SUITE FILE_PATH="coverage/Year2_attest$diary.coverage" NAME="diary Coverage Results" MODIFIED="1597732366672" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson5_QT2" />
+    <SUITE FILE_PATH="coverage/Year2_attest$rand_line_from_file.coverage" NAME="rand_line_from_file Coverage Results" MODIFIED="1597826432585" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson6_QT3" />
+    <SUITE FILE_PATH="coverage/Year2_attest$check.coverage" NAME="check Coverage Results" MODIFIED="1600353702604" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lesson3_classes" />
+    <SUITE FILE_PATH="coverage/Year2_attest$111.coverage" NAME="111 Coverage Results" MODIFIED="1599115543340" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Lesson1_povtor" />
+  </component>
+</project>
