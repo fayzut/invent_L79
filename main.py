@@ -16,11 +16,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('mainWindow.ui', self)
-        self.importWinBtn.clicked.connect(self.run_db_view)
+        self.importWinBtn.clicked.connect(self.run_import_from)
+        self.ViewdbBtn.clicked.connect(self.run_db_view)
 
     def run_db_view(self):
         self.db_view_win = DBViewWindow()
         self.db_view_win.show()
+
+    def run_import_from(self):
+        pass
 
 
 class DBViewWindow(QWidget):

@@ -27,6 +27,19 @@
      <string>Импорт</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="ViewdbBtn">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>60</y>
+      <width>75</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Просмотр БД</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
