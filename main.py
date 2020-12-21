@@ -72,12 +72,22 @@ class ImportForm(QWidget):
             self, "Исходные данные", "", "Excel Files (*.xlsx;*xls);;All Files (*)")
         if file_name:
             self.source_file_edit.setText(file_name)
-            self.parse_source()
+            self.source_file_edit.update()
+            workbook = load_workbook(filename=self.source_file_edit.text())
+            worksheets = workbook.sheetnames
+            self.sheets_list_box.addItems(workbook.worksheets)
+            self.sheets_list_box.current_index = 1
+            chosen_sheet = workbook['стр.2']
+            self.parse_source(chosen_sheet)
 
-    def parse_source(self):
-        workbook = load_workbook(filename=self.source_file_edit.text())
-        sheet_ranges = workbook['стр.2']
-        print(sheet_ranges['G3'].value)
+    def parse_source(self, the_sheet):
+        print(the_sheet['G3'].value)
+        values = []
+        for row in the_sheet.iter_rows(min_row=1, max_col=1):
+            values.append(row)
+        # print(the_sheet['A28'].value)
+        print(values[:10])
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
