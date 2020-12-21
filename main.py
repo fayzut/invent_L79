@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
+from importForm import Ui_ImportForm
+
 DB_Name = 'inventarizaciya10.db'
 
 
@@ -55,10 +57,11 @@ class DBViewWindow(QWidget):
                     i, j, QTableWidgetItem(str(elem)))
 
 
-class ImportForm(QWidget):
+class ImportForm(QWidget, Ui_ImportForm):
     def __init__(self):
         super().__init__()
-        uic.loadUi('importForm.ui', self)
+        # uic.loadUi('importForm.ui', self)
+        self.setupUi(self)
         self.db_select_file_btn.clicked.connect(self.get_db_filename)
         self.source_file_btn.clicked.connect(self.get_import_filename)
 
@@ -75,10 +78,11 @@ class ImportForm(QWidget):
             self.source_file_edit.update()
             workbook = load_workbook(filename=self.source_file_edit.text())
             worksheets = workbook.sheetnames
-            self.sheets_list_box.addItems(workbook.worksheets)
-            self.sheets_list_box.current_index = 1
-            chosen_sheet = workbook['стр.2']
-            self.parse_source(chosen_sheet)
+            self.sheets_list_box.addItems(worksheets)
+            self.sheets_list_box.setCurrentIndex(1)# второй лист по умолчанию
+            # chosen_sheet = workbook['стр.2']
+            # print(chosen_sheet)
+            self.parse_source(self.sheets_list_box.currentText())
 
     def parse_source(self, the_sheet):
         print(the_sheet['G3'].value)
@@ -87,6 +91,7 @@ class ImportForm(QWidget):
             values.append(row)
         # print(the_sheet['A28'].value)
         print(values[:10])
+
 
 
 def except_hook(cls, exception, traceback):
