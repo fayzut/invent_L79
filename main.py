@@ -62,8 +62,10 @@ class ImportForm(QWidget, Ui_ImportForm):
         super().__init__()
         # uic.loadUi('importForm.ui', self)
         self.setupUi(self)
+
         self.db_select_file_btn.clicked.connect(self.get_db_filename)
         self.source_file_btn.clicked.connect(self.get_import_filename)
+        self.start_import_button.clicked.connect(self.parse_source)
 
     def get_db_filename(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
@@ -74,24 +76,52 @@ class ImportForm(QWidget, Ui_ImportForm):
         file_name, _ = QFileDialog.getOpenFileName(
             self, "Исходные данные", "", "Excel Files (*.xlsx;*xls);;All Files (*)")
         if file_name:
+            self.sheets_list_box.addItem('Loading...')
             self.source_file_edit.setText(file_name)
-            self.source_file_edit.update()
-            workbook = load_workbook(filename=self.source_file_edit.text())
-            worksheets = workbook.sheetnames
-            self.sheets_list_box.addItems(worksheets)
-            self.sheets_list_box.setCurrentIndex(1)# второй лист по умолчанию
+            self.repaint()
+            # self.update()
+            self.workbook = load_workbook(filename=self.source_file_edit.text())
+            self.sheets_list_box.setEnabled(True)
+            self.sheets_list_box.clear()
+            self.sheets_list_box.addItems(self.workbook.sheetnames)
+            self.sheets_list_box.setCurrentIndex(1)  # второй лист по умолчанию
             # chosen_sheet = workbook['стр.2']
             # print(chosen_sheet)
-            self.parse_source(self.sheets_list_box.currentText())
+            # self.parse_source(self.sheets_list_box.currentText())
 
-    def parse_source(self, the_sheet):
+    def parse_source(self):
+        the_sheet = self.workbook[self.sheets_list_box.currentText()]
         print(the_sheet['G3'].value)
         values = []
-        for row in the_sheet.iter_rows(min_row=1, max_col=1):
-            values.append(row)
+        columns = "AGH"
+        row = 8
+        rows_on_list = 20
+        rows_between_lists = 10
+        on_list = 0
+        self.items_table.setColumnCount(len(columns))
+        while row <= the_sheet.max_row:
+            # for row in range(8, 27): #the_sheet.max_row+1):
+            if on_list >= rows_on_list:
+                on_list = 0
+                row += rows_between_lists
+            no = the_sheet[f"{columns[0]}{row}"]
+            name = the_sheet[f"{columns[1]}{row}"]
+            inv_num = the_sheet[f"{columns[2]}{row}"]
+            if no.value and int(no.value) == len(values) + 1:
+                values.append((no.value, name.value, inv_num.value))
+                self.items_table.setRowCount(self.items_table.rowCount() + 1)
+                for i, item in enumerate(values[-1]):
+                    self.items_table.setItem(self.items_table.rowCount()-1, i, QTableWidgetItem(
+                        str(item)))
+            else:
+                print(f"{no.value} != {len(values) + 1}\n"
+                      f"the data is not added:\n"
+                      f"{name.value},{inv_num.value}")
+            row += 1
+            on_list += 1
         # print(the_sheet['A28'].value)
-        print(values[:10])
-
+        self.items_table.repaint()
+        print(len(values))
 
 
 def except_hook(cls, exception, traceback):

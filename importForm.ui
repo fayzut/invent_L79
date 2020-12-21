@@ -104,6 +104,9 @@
    </property>
   </widget>
   <widget class="QComboBox" name="sheets_list_box">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>86</x>
@@ -114,6 +117,32 @@
    </property>
    <property name="editable">
     <bool>false</bool>
+   </property>
+   <property name="currentText">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="start_import_button">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>160</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Загрузить</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="items_table">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>411</width>
+     <height>271</height>
+    </rect>
    </property>
   </widget>
  </widget>
