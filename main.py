@@ -71,6 +71,8 @@ class ImportForm(QWidget, Ui_ImportForm):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
         if file_name:
             self.db_name_edit.setText(file_name)
+            self.con = sqlite3.connect(self.db_name_edit.text())
+
 
     def get_import_filename(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -113,6 +115,13 @@ class ImportForm(QWidget, Ui_ImportForm):
                 for i, item in enumerate(values[-1]):
                     self.items_table.setItem(self.items_table.rowCount()-1, i, QTableWidgetItem(
                         str(item)))
+                cursor = self.con.cursor()
+
+                que = f"UPDATE goods " \
+                      f"SET goods_name = {name.value} " \
+                      f"WHERE invent_number = {inv_num.value}"
+                cursor.execute(que)
+                self.con.commit()
             else:
                 print(f"{no.value} != {len(values) + 1}\n"
                       f"the data is not added:\n"
