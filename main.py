@@ -150,4 +150,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     mainWin = MainWindow()
     mainWin.show()
+    sys.excepthook = except_hook
     sys.exit(app.exec_())
