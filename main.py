@@ -71,7 +71,6 @@ class ImportForm(QWidget, Ui_ImportForm):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
         if file_name:
             self.db_name_edit.setText(file_name)
-            self.con = sqlite3.connect(self.db_name_edit.text())
 
 
     def get_import_filename(self):
@@ -101,6 +100,8 @@ class ImportForm(QWidget, Ui_ImportForm):
         rows_between_lists = 10
         on_list = 0
         self.items_table.setColumnCount(len(columns))
+        con = sqlite3.connect(self.db_name_edit.text())
+        cursor = con.cursor()
         while row <= the_sheet.max_row:
             # for row in range(8, 27): #the_sheet.max_row+1):
             if on_list >= rows_on_list:
@@ -113,23 +114,31 @@ class ImportForm(QWidget, Ui_ImportForm):
                 values.append((no.value, name.value, inv_num.value))
                 self.items_table.setRowCount(self.items_table.rowCount() + 1)
                 for i, item in enumerate(values[-1]):
-                    self.items_table.setItem(self.items_table.rowCount()-1, i, QTableWidgetItem(
+                    self.items_table.setItem(self.items_table.rowCount() - 1, i, QTableWidgetItem(
                         str(item)))
-                cursor = self.con.cursor()
-
-                que = f"UPDATE goods " \
-                      f"SET goods_name = {name.value} " \
-                      f"WHERE invent_number = {inv_num.value}"
+                exists_in_DB = cursor.execute(f"SELECT * FROM goods "
+                                              f"WHERE invent_number='{inv_num.value}'").fetchone()
+                if not exists_in_DB:
+                    que = f"INSERT INTO goods(goods_name, invent_number) " \
+                          f"VALUES ('{name.value}','{inv_num.value}')"
+                else:
+                    print(f"ВНИМАНИЕ!!! ВОЗМОЖНА Замена существующих данных!\n"
+                          f"{name.value} - {inv_num.value}\n"
+                          f"------------------------------")
+                    que = f"UPDATE goods " \
+                          f"SET goods_name = '{name.value}' " \
+                          f"WHERE invent_number = '{inv_num.value}'"
                 cursor.execute(que)
-                self.con.commit()
+                con.commit()
             else:
                 print(f"{no.value} != {len(values) + 1}\n"
                       f"the data is not added:\n"
                       f"{name.value},{inv_num.value}")
             row += 1
             on_list += 1
-        # print(the_sheet['A28'].value)
         self.items_table.repaint()
+        con.close()
+        # print(the_sheet['A28'].value)
         print(len(values))
 
 
