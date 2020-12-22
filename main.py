@@ -44,10 +44,16 @@ class DBViewWindow(QWidget):
         con = sqlite3.connect(self.db_name)
         cur = con.cursor()
         result = cur.execute("""SELECT * FROM goods""").fetchall()
+
+        self.tableWidget.setColumnCount(len(result[0]))
+        titles = cur.execute("pragma table_info(goods)").fetchall()
+        title_names = [x[1] for x in titles]
+        self.tableWidget.setHorizontalHeaderLabels(
+            title_names
+            )
+        self.tableWidget.setRowCount(0)
         cur.close()
         con.close()
-        self.tableWidget.setColumnCount(len(result[0]))
-        self.tableWidget.setRowCount(0)
         # Заполняем таблицу элементами
         for i, row in enumerate(result):
             self.tableWidget.setRowCount(
@@ -71,7 +77,6 @@ class ImportForm(QWidget, Ui_ImportForm):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
         if file_name:
             self.db_name_edit.setText(file_name)
-
 
     def get_import_filename(self):
         file_name, _ = QFileDialog.getOpenFileName(
