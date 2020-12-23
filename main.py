@@ -6,8 +6,8 @@ import sys
 from PyQt5 import uic
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog
+from docx import Document
 from openpyxl import load_workbook
-from openpyxl.utils import get_column_letter
 
 from importForm import Ui_ImportForm
 
@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
         uic.loadUi('mainWindow.ui', self)
         self.importWinBtn.clicked.connect(self.run_import_from)
         self.ViewdbBtn.clicked.connect(self.run_db_view)
+        self.print_int_btn.clicked.connect(self.run_print_inv_form)
 
     def run_db_view(self):
         self.db_view_win = DBViewWindow()
@@ -32,6 +33,37 @@ class MainWindow(QMainWindow):
         self.importForm = ImportForm()
         self.importForm.show()
 
+    def run_print_inv_form(self):
+        self.printForm = PrintInvForm()
+        self.printForm.show()
+
+
+class PrintInvForm(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('printInvForm.ui', self)
+        self.save_btn.clicked.connect(self.make_document)
+
+    def connect_db(self):
+        self.connection = sqlite3.connect(DB_Name)
+        query = f"SELECT goods_name, invent_number, location_id " \
+                f"FROM goods " \
+                # f"WHERE {True}"
+        self.res = self.connection.cursor().execute(query).fetchall()
+
+
+    def make_document(self):
+        doc = Document()
+        tmp_fill = '*заполнитель*'
+        self.connect_db()
+        for data in self.res:
+            doc.add_heading(f"Инвентарные номера в {tmp_fill}")
+            doc.add_paragraph(f"Местонахождение: {data[2]}")
+            table = doc.add_table(rows=2, cols=1)
+            table.rows[0].cells[0].text = str(data[0])
+            table.rows[1].cells[0].text = str(data[1])
+
+        doc.save('test.docx')
 
 class DBViewWindow(QWidget):
     def __init__(self):
