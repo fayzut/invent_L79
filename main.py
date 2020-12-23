@@ -4,6 +4,7 @@ import sqlite3
 import sys
 
 from PyQt5 import uic
+from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
@@ -37,30 +38,37 @@ class DBViewWindow(QWidget):
         super().__init__()
         uic.loadUi('db_view.ui', self)
         self.db_name = DB_Name
+        # Подключение БД к таблице отображения
+        # Подключение через QSqlRelationalTableModel
+        self.db = QSqlDatabase.addDatabase('QSQLITE')
+        self.db.setDatabaseName(self.db_name)
+        self.db.open()
+        self.model = QSqlRelationalTableModel(self, self.db)
+        self.model.setTable('goods')
+        self.model.setRelation(5, QSqlRelation('statuses', 'id_status', 'status_name'))
+        self.model.setRelation(6, QSqlRelation('goods_types', 'id_goods_type', 'goods_type_name'))
+        self.model.setRelation(7, QSqlRelation('goods_subtypes', 'id_goods_subtype',
+                                               'goods_subtype_name'))
+        self.model.setRelation(8, QSqlRelation('location', 'id_location', 'location_name'))
+        self.model.setRelation(9, QSqlRelation('responsibles', 'id_responsible', 'FIO'))
         self.refresh()
         self.refreshBtn.clicked.connect(self.refresh)
+        self.save_all_btn.clicked.connect(self.submitall)
+
+    # Предположительно на выходе будет закрываться БД
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.db.close()
 
     def refresh(self):
-        con = sqlite3.connect(self.db_name)
-        cur = con.cursor()
-        result = cur.execute("""SELECT * FROM goods""").fetchall()
+        self.model.select()
+        self.tableView.setModel(self.model)
+        self.tableView.setItemDelegate(QSqlRelationalDelegate(self.tableView))
 
-        self.tableWidget.setColumnCount(len(result[0]))
-        titles = cur.execute("pragma table_info(goods)").fetchall()
-        title_names = [x[1] for x in titles]
-        self.tableWidget.setHorizontalHeaderLabels(
-            title_names
-            )
-        self.tableWidget.setRowCount(0)
-        cur.close()
-        con.close()
-        # Заполняем таблицу элементами
-        for i, row in enumerate(result):
-            self.tableWidget.setRowCount(
-                self.tableWidget.rowCount() + 1)
-            for j, elem in enumerate(row):
-                self.tableWidget.setItem(
-                    i, j, QTableWidgetItem(str(elem)))
+    def submitall(self):
+        if not self.model.submitAll():
+            print(self.model.lastError())
+        else:
+            self.refresh()
 
 
 class ImportForm(QWidget, Ui_ImportForm):
