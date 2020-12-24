@@ -2,14 +2,17 @@
 # Выбор режима дальнейшей работы
 import sqlite3
 import sys
+import code128
+import openpyxl
 
 from PyQt5 import uic
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog
-from docx import Document
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
+from PIL import Image
 
 from importForm import Ui_ImportForm
+# from code128 import *
 
 DB_Name = 'inventarizaciya10.db'
 
@@ -48,22 +51,34 @@ class PrintInvForm(QWidget):
         self.connection = sqlite3.connect(DB_Name)
         query = f"SELECT goods_name, invent_number, location_id " \
                 f"FROM goods " \
-                # f"WHERE {True}"
+            # f"WHERE {True}"
         self.res = self.connection.cursor().execute(query).fetchall()
 
-
     def make_document(self):
-        doc = Document()
-        tmp_fill = '*заполнитель*'
         self.connect_db()
-        for data in self.res:
-            doc.add_heading(f"Инвентарные номера в {tmp_fill}")
-            doc.add_paragraph(f"Местонахождение: {data[2]}")
-            table = doc.add_table(rows=2, cols=1)
-            table.rows[0].cells[0].text = str(data[0])
-            table.rows[1].cells[0].text = str(data[1])
+        xlsx = Workbook()
+        dest_filename = 'test.xlsx'
+        ws1 = xlsx.active
+        ws1.title = "Все позиции"
 
-        doc.save('test.docx')
+        for i, data in enumerate(self.res):
+            ws1.append(data)
+            # ws1.append(code128_image(data[1]))
+            # ws1.append(code128.image(data[1]))
+
+            # img = code128.image(data[1])
+            # # img = Image.open('test.jpg')
+            # img.anchor = 'A1'
+            # ws1.add_image(img)
+            # doc.add_paragraph(f"Местонахождение: {data[2]}")
+            # table = doc.add_table(rows=2, cols=1)
+            # table.rows[0].cells[0].text = str(data[0]).strip()
+            # table.rows[0].cells[0].width = 10
+            # table.rows[1].cells[0].text = str(data[1]).strip()
+
+        # doc.add_heading(f"Инвентарные номера в {tmp_fill}")
+        xlsx.save(filename=dest_filename)
+
 
 class DBViewWindow(QWidget):
     def __init__(self):
