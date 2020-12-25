@@ -66,20 +66,8 @@ class PrintInvForm(QWidget):
         for row, data in enumerate(self.res):
             ws1.write(row, 0, data[0])
             ws1.write(row, 1, data[1])
-            ws1.write(row, 2, data[1], code128_format)
+            ws1.write(row, 2, quote(data[1]), code128_format)
             ws1.write(row, 3, data[2])
-            # ws1.append(code128_image(data[1]))
-            # ws1.append(code128.image(data[1]))
-
-            # img = code128.image(data[1])
-            # # img = Image.open('test.jpg')
-            # img.anchor = 'A1'
-            # ws1.add_image(img)
-            # doc.add_paragraph(f"Местонахождение: {data[2]}")
-            # table = doc.add_table(rows=2, cols=1)
-            # table.rows[0].cells[0].text = str(data[0]).strip()
-            # table.rows[0].cells[0].width = 10
-            # table.rows[1].cells[0].text = str(data[1]).strip()
         workbook.close()
 
 
