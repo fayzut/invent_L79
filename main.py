@@ -1,5 +1,5 @@
 # Главная основная форма приложения
-# Выбор режима дальнейшей работы
+# Выбор файла БД и режима дальнейшей работы
 import sqlite3
 import sys
 import xlsxwriter
@@ -9,10 +9,9 @@ from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QS
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
     QMessageBox
 from openpyxl import load_workbook
-from urllib.parse import quote, unquote
+from urllib.parse import quote
+
 from importForm import Ui_ImportForm
-
-
 
 
 class MainWindow(QMainWindow):
@@ -63,13 +62,13 @@ class PrintInvForm(QWidget):
             self.filename.setText(file_name)
 
     def make_document(self):
-        def add_to_file(res, location, ws):
-            ws.name = location
-            for row, data in enumerate(res):
-                ws.write(row, 0, data[0])
-                ws.write(row, 1, data[1])
-                ws.write(row, 2, quote(data[1]), code128_format)
-                ws.write(row, 3, data[2])
+        def add_to_file(income_res, worksheet_name, target_worksheet):
+            target_worksheet.name = worksheet_name
+            for row, data in enumerate(income_res):
+                target_worksheet.write(row, 0, data[0])
+                target_worksheet.write(row, 1, data[1])
+                target_worksheet.write(row, 2, quote(data[1]), code128_format)
+                target_worksheet.write(row, 3, data[2])
 
         connection = sqlite3.connect(self.DB_Name)
         query = f"SELECT goods_name, invent_number, location_name " \
@@ -176,8 +175,6 @@ class ImportForm(QWidget, Ui_ImportForm):
             self.sheets_list_box.setCurrentIndex(1)  # второй лист по умолчанию
 
     def parse_source(self):
-        def make_barcode(str):
-            pass
 
         the_sheet = self.workbook[self.sheets_list_box.currentText()]
         print(the_sheet['G3'].value)
