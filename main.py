@@ -4,13 +4,15 @@ import sqlite3
 import sys
 import code128
 import openpyxl
+import xlsxwriter
 
 from PyQt5 import uic
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog
 from openpyxl import load_workbook, Workbook
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 from PIL import Image
-
+from urllib.parse import quote, unquote
 from importForm import Ui_ImportForm
 # from code128 import *
 
@@ -56,13 +58,16 @@ class PrintInvForm(QWidget):
 
     def make_document(self):
         self.connect_db()
-        xlsx = Workbook()
         dest_filename = 'test.xlsx'
-        ws1 = xlsx.active
-        ws1.title = "Все позиции"
-
-        for i, data in enumerate(self.res):
-            ws1.append(data)
+        workbook = xlsxwriter.Workbook(dest_filename)
+        code128_format = workbook.add_format({'font_name': 'Code 128'})
+        ws1 = workbook.add_worksheet()
+        ws1.name = "Все позиции"
+        for row, data in enumerate(self.res):
+            ws1.write(row, 0, data[0])
+            ws1.write(row, 1, data[1])
+            ws1.write(row, 2, data[1], code128_format)
+            ws1.write(row, 3, data[2])
             # ws1.append(code128_image(data[1]))
             # ws1.append(code128.image(data[1]))
 
@@ -75,9 +80,7 @@ class PrintInvForm(QWidget):
             # table.rows[0].cells[0].text = str(data[0]).strip()
             # table.rows[0].cells[0].width = 10
             # table.rows[1].cells[0].text = str(data[1]).strip()
-
-        # doc.add_heading(f"Инвентарные номера в {tmp_fill}")
-        xlsx.save(filename=dest_filename)
+        workbook.close()
 
 
 class DBViewWindow(QWidget):
@@ -151,6 +154,8 @@ class ImportForm(QWidget, Ui_ImportForm):
             # self.parse_source(self.sheets_list_box.currentText())
 
     def parse_source(self):
+        def make_barcode(str):
+            pass
         the_sheet = self.workbook[self.sheets_list_box.currentText()]
         print(the_sheet['G3'].value)
         values = []
@@ -170,6 +175,9 @@ class ImportForm(QWidget, Ui_ImportForm):
             no = the_sheet[f"{columns[0]}{row}"]
             name = the_sheet[f"{columns[1]}{row}"]
             inv_num = the_sheet[f"{columns[2]}{row}"]
+            if not inv_num:
+                # если нет инвентарного номера то
+                inv_num = "NO_INV_"+str(no.value)
             if no.value and int(no.value) == len(values) + 1:
                 values.append((no.value, name.value, inv_num.value))
                 self.items_table.setRowCount(self.items_table.rowCount() + 1)
