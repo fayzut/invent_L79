@@ -50,20 +50,21 @@ class PrintInvForm(QWidget):
         self.save_btn.clicked.connect(self.make_document)
 
     def connect_db(self):
-        self.connection = sqlite3.connect(DB_Name)
-        query = f"SELECT goods_name, invent_number, location_id " \
-                f"FROM goods " \
-            # f"WHERE {True}"
-        self.res = self.connection.cursor().execute(query).fetchall()
+        pass
 
     def make_document(self):
-        self.connect_db()
+        connection = sqlite3.connect(DB_Name)
+        query = f"SELECT goods_name, invent_number, location_name " \
+                f"FROM goods, location " \
+                f"WHERE location_id=id_location"
+        res = connection.cursor().execute(query).fetchall()
+        connection.close()
         dest_filename = 'test.xlsx'
         workbook = xlsxwriter.Workbook(dest_filename)
         code128_format = workbook.add_format({'font_name': 'Code 128'})
         ws1 = workbook.add_worksheet()
         ws1.name = "Все позиции"
-        for row, data in enumerate(self.res):
+        for row, data in enumerate(res):
             ws1.write(row, 0, data[0])
             ws1.write(row, 1, data[1])
             ws1.write(row, 2, quote(data[1]), code128_format)
