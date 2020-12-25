@@ -2,40 +2,43 @@
 # Выбор режима дальнейшей работы
 import sqlite3
 import sys
-import code128
-import openpyxl
 import xlsxwriter
 
 from PyQt5 import uic
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog
-from openpyxl import load_workbook, Workbook
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
-from PIL import Image
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
+    QMessageBox
+from openpyxl import load_workbook
 from urllib.parse import quote, unquote
 from importForm import Ui_ImportForm
-# from code128 import *
-
-DB_Name = 'inventarizaciya10.db'
 
 
-# import db_view
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        # БД по умолчанию
+        self.DB_Name = 'inventarizaciya10.db'
         uic.loadUi('mainWindow.ui', self)
         self.importWinBtn.clicked.connect(self.run_import_from)
         self.ViewdbBtn.clicked.connect(self.run_db_view)
         self.print_int_btn.clicked.connect(self.run_print_inv_form)
+        self.file_open_btn.clicked.connect(self.openfile)
+
+    def openfile(self):
+        file_name, _ = QFileDialog.getOpenFileName(
+            self, "Выбор базы данных", "", "DataBase Files (*.db);;All Files (*)")
+        if file_name:
+            self.db_filename.setText(file_name)
+            self.DB_Name = file_name
 
     def run_db_view(self):
-        self.db_view_win = DBViewWindow()
+        self.db_view_win = DBViewWindow(self.DB_Name)
         self.db_view_win.show()
 
     def run_import_from(self):
-        self.importForm = ImportForm()
+        self.importForm = ImportForm(self.DB_Name)
         self.importForm.show()
 
     def run_print_inv_form(self):
@@ -48,35 +51,69 @@ class PrintInvForm(QWidget):
         super().__init__()
         uic.loadUi('printInvForm.ui', self)
         self.save_btn.clicked.connect(self.make_document)
+        self.file_open_btn.clicked.connect(self.choose_file)
 
     def connect_db(self):
         pass
 
+    def choose_file(self):
+        file_name, _ = QFileDialog.getSaveFileName(
+            self, "Исходные данные", "", "Excel Files (*.xlsx;*xls);;All Files (*)")
+        if file_name:
+            self.filename.setText(file_name)
+
     def make_document(self):
-        connection = sqlite3.connect(DB_Name)
+        def add_to_file(res, location, ws):
+            ws.name = location
+            for row, data in enumerate(res):
+                ws.write(row, 0, data[0])
+                ws.write(row, 1, data[1])
+                ws.write(row, 2, quote(data[1]), code128_format)
+                ws.write(row, 3, data[2])
+
+        connection = sqlite3.connect(self.DB_Name)
         query = f"SELECT goods_name, invent_number, location_name " \
                 f"FROM goods, location " \
                 f"WHERE location_id=id_location"
         res = connection.cursor().execute(query).fetchall()
         connection.close()
-        dest_filename = 'test.xlsx'
-        workbook = xlsxwriter.Workbook(dest_filename)
-        code128_format = workbook.add_format({'font_name': 'Code 128'})
-        ws1 = workbook.add_worksheet()
-        ws1.name = "Все позиции"
-        for row, data in enumerate(res):
-            ws1.write(row, 0, data[0])
-            ws1.write(row, 1, data[1])
-            ws1.write(row, 2, quote(data[1]), code128_format)
-            ws1.write(row, 3, data[2])
-        workbook.close()
+        dest_filename = self.filename.text()
+        if dest_filename:
+            workbook = xlsxwriter.Workbook(dest_filename)
+            code128_format = workbook.add_format({'font_name': 'Code 128'})
+            ws1 = workbook.add_worksheet()
+            add_to_file(res, "Все позиции", ws1)
+            # далее делаем разбивку по location на отдельные листы
+            dif_locations = set([data[2] for data in res])
+            for location in dif_locations:
+                connection = sqlite3.connect(self.DB_Name)
+                query = f"SELECT goods_name, invent_number, location_name " \
+                        f"FROM goods, location " \
+                        f"WHERE location_id=id_location AND location_name='{location}'"
+                res = connection.cursor().execute(query).fetchall()
+                connection.close()
+                add_to_file(res, location, workbook.add_worksheet())
+            workbook.close()
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setWindowTitle("Успешно!")
+            msg.setText(f"Сохранение в \n{dest_filename}\nпрошло успешно")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+        else:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("ОШИБКА!")
+            msg.setText(f"Нет имени файла!!!")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
 
 class DBViewWindow(QWidget):
-    def __init__(self):
+    def __init__(self, database_name):
         super().__init__()
         uic.loadUi('db_view.ui', self)
-        self.db_name = DB_Name
+        self.db_name = database_name
         # Подключение БД к таблице отображения
         # Подключение через QSqlRelationalTableModel
         self.db = QSqlDatabase.addDatabase('QSQLITE')
@@ -111,11 +148,11 @@ class DBViewWindow(QWidget):
 
 
 class ImportForm(QWidget, Ui_ImportForm):
-    def __init__(self):
+    def __init__(self, database_name):
         super().__init__()
         # uic.loadUi('importForm.ui', self)
         self.setupUi(self)
-
+        self.db_name_edit.setText(database_name)
         self.db_select_file_btn.clicked.connect(self.get_db_filename)
         self.source_file_btn.clicked.connect(self.get_import_filename)
         self.start_import_button.clicked.connect(self.parse_source)
@@ -132,19 +169,16 @@ class ImportForm(QWidget, Ui_ImportForm):
             self.sheets_list_box.addItem('Loading...')
             self.source_file_edit.setText(file_name)
             self.repaint()
-            # self.update()
             self.workbook = load_workbook(filename=self.source_file_edit.text())
             self.sheets_list_box.setEnabled(True)
             self.sheets_list_box.clear()
             self.sheets_list_box.addItems(self.workbook.sheetnames)
             self.sheets_list_box.setCurrentIndex(1)  # второй лист по умолчанию
-            # chosen_sheet = workbook['стр.2']
-            # print(chosen_sheet)
-            # self.parse_source(self.sheets_list_box.currentText())
 
     def parse_source(self):
         def make_barcode(str):
             pass
+
         the_sheet = self.workbook[self.sheets_list_box.currentText()]
         print(the_sheet['G3'].value)
         values = []
@@ -164,9 +198,9 @@ class ImportForm(QWidget, Ui_ImportForm):
             no = the_sheet[f"{columns[0]}{row}"]
             name = the_sheet[f"{columns[1]}{row}"]
             inv_num = the_sheet[f"{columns[2]}{row}"]
-            if not inv_num:
+            if not inv_num.value:
                 # если нет инвентарного номера то
-                inv_num = "NO_INV_"+str(no.value)
+                inv_num.value = "NO_INV_" + str(no.value)
             if no.value and int(no.value) == len(values) + 1:
                 values.append((no.value, name.value, inv_num.value))
                 self.items_table.setRowCount(self.items_table.rowCount() + 1)
