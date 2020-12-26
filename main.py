@@ -15,6 +15,11 @@ from urllib.parse import quote
 from importForm import Ui_ImportForm
 
 
+class Database():
+    def __init__(self, db_filename):
+        self.connection = sqlite3.connect(db_filename)
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -42,14 +47,15 @@ class MainWindow(QMainWindow):
         self.importForm.show()
 
     def run_print_inv_form(self):
-        self.printForm = PrintInvForm()
+        self.printForm = PrintInvForm(self.DB_Name)
         self.printForm.show()
 
 
 class PrintInvForm(QWidget):
-    def __init__(self):
+    def __init__(self, database_name):
         super().__init__()
         uic.loadUi('printInvForm.ui', self)
+        self.db_name = database_name
         self.save_btn.clicked.connect(self.make_document)
         self.file_open_btn.clicked.connect(self.choose_file)
 
@@ -71,7 +77,7 @@ class PrintInvForm(QWidget):
                 target_worksheet.write(row, 2, quote(data[1]), code128_format)
                 target_worksheet.write(row, 3, data[2])
 
-        connection = sqlite3.connect(self.DB_Name)
+        connection = sqlite3.connect(self.db_name)
         query = f"SELECT goods_name, invent_number, location_name " \
                 f"FROM goods, location " \
                 f"WHERE location_id=id_location"
@@ -86,7 +92,7 @@ class PrintInvForm(QWidget):
             # далее делаем разбивку по location на отдельные листы
             dif_locations = set([data[2] for data in res])
             for location in dif_locations:
-                connection = sqlite3.connect(self.DB_Name)
+                connection = sqlite3.connect(self.db_name)
                 query = f"SELECT goods_name, invent_number, location_name " \
                         f"FROM goods, location " \
                         f"WHERE location_id=id_location AND location_name='{location}'"
