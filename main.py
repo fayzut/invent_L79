@@ -8,6 +8,7 @@ from PyQt5 import uic
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
     QMessageBox
+from PyQt5.QtCore import Qt
 from openpyxl import load_workbook
 from urllib.parse import quote
 
@@ -152,9 +153,15 @@ class ImportForm(QWidget, Ui_ImportForm):
         # uic.loadUi('importForm.ui', self)
         self.setupUi(self)
         self.db_name_edit.setText(database_name)
+        self.not_braked = True
         self.db_select_file_btn.clicked.connect(self.get_db_filename)
         self.source_file_btn.clicked.connect(self.get_import_filename)
         self.start_import_button.clicked.connect(self.parse_source)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            jjj
+            self.not_braked = False
 
     def get_db_filename(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
@@ -177,7 +184,6 @@ class ImportForm(QWidget, Ui_ImportForm):
     def parse_source(self):
 
         the_sheet = self.workbook[self.sheets_list_box.currentText()]
-        print(the_sheet['G3'].value)
         values = []
         columns = "AGH"
         row = 8
@@ -187,8 +193,7 @@ class ImportForm(QWidget, Ui_ImportForm):
         self.items_table.setColumnCount(len(columns))
         con = sqlite3.connect(self.db_name_edit.text())
         cursor = con.cursor()
-        while row <= the_sheet.max_row:
-            # for row in range(8, 27): #the_sheet.max_row+1):
+        while row <= the_sheet.max_row and self.not_braked:
             if on_list >= rows_on_list:
                 on_list = 0
                 row += rows_between_lists
@@ -224,6 +229,7 @@ class ImportForm(QWidget, Ui_ImportForm):
                       f"{name.value},{inv_num.value}")
             row += 1
             on_list += 1
+
         self.items_table.repaint()
         con.close()
         # print(the_sheet['A28'].value)
