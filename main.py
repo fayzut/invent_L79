@@ -4,19 +4,27 @@ import sqlite3
 import sys
 import xlsxwriter
 
-from PyQt5 import uic
+from PyQt5 import uic, QtSql
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
-    QMessageBox
+    QMessageBox, QPushButton
 from openpyxl import load_workbook
 from urllib.parse import quote
 
 from importForm import Ui_ImportForm
+from connection import create_connection
 
 
-class Database():
-    def __init__(self, db_filename):
-        self.connection = sqlite3.connect(db_filename)
+class Database(QSqlDatabase):
+    def __init__(self, file):
+        super().__init__()
+        # Подключение через QSqlRelationalTableModel
+        self.addDatabase('QSQLITE')
+        self.setDatabaseName(file)
+        self.open()
+
+    def __del__(self):
+        self.close()
 
 
 class MainWindow(QMainWindow):
@@ -25,6 +33,13 @@ class MainWindow(QMainWindow):
         # БД по умолчанию
         self.DB_Name = 'inventarizaciya10.db'
         uic.loadUi('mainWindow.ui', self)
+        if not create_connection(self.DB_Name):
+            # a = QPushButton().setEnabled()
+            self.importWinBtn.setEnabled(False)
+            self.print_int_btn.setEnabled(False)
+        self.db_view_win = DBViewWindow()
+        self.importForm = ImportForm()
+        self.printForm = PrintInvForm()
         self.importWinBtn.clicked.connect(self.run_import_from)
         self.ViewdbBtn.clicked.connect(self.run_db_view)
         self.print_int_btn.clicked.connect(self.run_print_inv_form)
@@ -35,31 +50,26 @@ class MainWindow(QMainWindow):
             self, "Выбор базы данных", "", "DataBase Files (*.db);;All Files (*)")
         if file_name:
             self.db_filename.setText(file_name)
-            self.DB_Name = file_name
+            if create_connection(file_name):
+                self.importWinBtn.setEnabled(True)
+                self.print_int_btn.setEnabled(True)
 
     def run_db_view(self):
-        self.db_view_win = DBViewWindow(self.DB_Name)
         self.db_view_win.show()
 
     def run_import_from(self):
-        self.importForm = ImportForm(self.DB_Name)
         self.importForm.show()
 
     def run_print_inv_form(self):
-        self.printForm = PrintInvForm(self.DB_Name)
         self.printForm.show()
 
 
 class PrintInvForm(QWidget):
-    def __init__(self, database_name):
+    def __init__(self):
         super().__init__()
         uic.loadUi('printInvForm.ui', self)
-        self.db_name = database_name
         self.save_btn.clicked.connect(self.make_document)
         self.file_open_btn.clicked.connect(self.choose_file)
-
-    def connect_db(self):
-        pass
 
     def choose_file(self):
         file_name, _ = QFileDialog.getSaveFileName(
@@ -76,12 +86,15 @@ class PrintInvForm(QWidget):
                 target_worksheet.write(row, 2, quote(data[1]), code128_format)
                 target_worksheet.write(row, 3, data[2])
 
-        connection = sqlite3.connect(self.db_name)
-        query = f"SELECT goods_name, invent_number, location_name " \
-                f"FROM goods, location " \
-                f"WHERE location_id=id_location"
-        res = connection.cursor().execute(query).fetchall()
-        connection.close()
+        # connection = sqlite3.connect(self.db_name)
+        query = QtSql.QSqlQuery()
+        query.exec_(f"SELECT goods_name, invent_number, location_name "
+                    f"FROM goods, location "
+                    f"WHERE location_id=id_location"
+                    )
+        # res = connection.cursor().execute(query).fetchall()
+        res = query.result().fetch()
+        # connection.close()
         dest_filename = self.filename.text()
         if dest_filename:
             workbook = xlsxwriter.Workbook(dest_filename)
@@ -115,16 +128,16 @@ class PrintInvForm(QWidget):
 
 
 class DBViewWindow(QWidget):
-    def __init__(self, database_name):
+    def __init__(self):
         super().__init__()
         uic.loadUi('db_view.ui', self)
-        self.db_name = database_name
+        # self.db = database
         # Подключение БД к таблице отображения
         # Подключение через QSqlRelationalTableModel
-        self.db = QSqlDatabase.addDatabase('QSQLITE')
-        self.db.setDatabaseName(self.db_name)
-        self.db.open()
-        self.model = QSqlRelationalTableModel(self, self.db)
+        # self.db = QSqlDatabase.addDatabase('QSQLITE')
+        # self.db.setDatabaseName(self.db_name)
+        # self.db.open()
+        self.model = QSqlRelationalTableModel(self)
         self.model.setTable('goods')
         self.model.setRelation(5, QSqlRelation('statuses', 'id_status', 'status_name'))
         self.model.setRelation(6, QSqlRelation('goods_types', 'id_goods_type', 'goods_type_name'))
@@ -136,9 +149,6 @@ class DBViewWindow(QWidget):
         self.refreshBtn.clicked.connect(self.refresh)
         self.save_all_btn.clicked.connect(self.submitall)
 
-    # Предположительно на выходе будет закрываться БД
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.db.close()
 
     def refresh(self):
         self.model.select()
@@ -153,11 +163,11 @@ class DBViewWindow(QWidget):
 
 
 class ImportForm(QWidget, Ui_ImportForm):
-    def __init__(self, database_name):
+    def __init__(self, file_name):
         super().__init__()
         # uic.loadUi('importForm.ui', self)
         self.setupUi(self)
-        self.db_name_edit.setText(database_name)
+        self.db_name_edit.setText(file_name)
         self.db_select_file_btn.clicked.connect(self.get_db_filename)
         self.source_file_btn.clicked.connect(self.get_import_filename)
         self.start_import_button.clicked.connect(self.parse_source)
