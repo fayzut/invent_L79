@@ -15,6 +15,7 @@ from urllib.parse import quote
 
 from importForm import Ui_ImportForm
 from connection import create_connection
+from objects import Good
 
 
 class Database(QSqlDatabase):
@@ -216,9 +217,12 @@ class ImportForm(QWidget, Ui_ImportForm):
             if on_list >= rows_on_list:
                 on_list = 0
                 row += rows_between_lists
+
             no = the_sheet[f"{columns[0]}{row}"]
             name = the_sheet[f"{columns[1]}{row}"]
             inv_num = the_sheet[f"{columns[2]}{row}"]
+            new_good = Good(name.value, inv_num.value)
+
             if not inv_num.value:
                 # если нет инвентарного номера то
                 inv_num.value = "NO_INV_" + str(no.value)
