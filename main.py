@@ -15,7 +15,7 @@ from urllib.parse import quote
 from importForm import Ui_ImportForm
 
 
-class Database():
+class Database:
     def __init__(self, db_filename):
         self.connection = sqlite3.connect(db_filename)
 
@@ -209,6 +209,8 @@ class ImportForm(QWidget, Ui_ImportForm):
         self.items_table.setColumnCount(len(columns))
         con = sqlite3.connect(self.db_name_edit.text())
         cursor = con.cursor()
+        all_goods = []
+        que = ''
         while row <= the_sheet.max_row and self.not_braked:
             if on_list >= rows_on_list:
                 on_list = 0
@@ -225,31 +227,39 @@ class ImportForm(QWidget, Ui_ImportForm):
                 for i, item in enumerate(values[-1]):
                     self.items_table.setItem(self.items_table.rowCount() - 1, i, QTableWidgetItem(
                         str(item)))
-                exists_in_DB = cursor.execute(f"SELECT * FROM goods "
-                                              f"WHERE invent_number='{inv_num.value}'").fetchone()
-                if not exists_in_DB:
-                    que = f"INSERT INTO goods(goods_name, invent_number) " \
-                          f"VALUES ('{name.value}','{inv_num.value}')"
-                else:
-                    print(f"ВНИМАНИЕ!!! ВОЗМОЖНА Замена существующих данных!\n"
-                          f"{name.value} - {inv_num.value}\n"
-                          f"------------------------------")
-                    que = f"UPDATE goods " \
-                          f"SET goods_name = '{name.value}' " \
-                          f"WHERE invent_number = '{inv_num.value}'"
-                cursor.execute(que)
-                con.commit()
+                all_goods.append(tuple([name.value, inv_num.value]))
+                # exists_in_DB = cursor.execute(f"SELECT * FROM goods "
+                #                               f"WHERE invent_number='{inv_num.value}'").fetchone()
+                # if not exists_in_DB:
+                #     que = f"INSERT INTO goods(goods_name, invent_number) " \
+                #           f"VALUES ('{name.value}','{inv_num.value}')"
+                # else:
+                #     print(f"ВНИМАНИЕ!!! ВОЗМОЖНА Замена существующих данных!\n"
+                #           f"{name.value} - {inv_num.value}\n"
+                #           f"------------------------------")
+                #     que = f"UPDATE goods " \
+                #           f"SET goods_name = '{name.value}' " \
+                #           f"WHERE invent_number = '{inv_num.value}'"
             else:
                 print(f"{no.value} != {len(values) + 1}\n"
                       f"the data is not added:\n"
                       f"{name.value},{inv_num.value}")
+            excluded = "excluded"  # только чтобы не подсвечивалась как ошибка
+            que = f"INSERT into goods(goods_name, invent_number) " \
+                  f"VALUES {', '.join([str(x) for x in all_goods])} " \
+                  f"ON CONFLICT (invent_number) DO " \
+                  f"UPDATE SET " \
+                  f"comment = comment ||'\n Старое значение Наименования'||goods_name, " \
+                  f"goods_name = {excluded}.goods_name"
             row += 1
             on_list += 1
             # self.keyPressEvent()
+        cursor.execute(que)
+        con.commit()
         self.items_table.repaint()
         con.close()
         # print(the_sheet['A28'].value)
-        print(len(values))
+        print("Импортировано записей:", len(values))
 
 
 def except_hook(cls, exception, traceback):
