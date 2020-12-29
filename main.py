@@ -5,7 +5,9 @@ import sys
 import xlsxwriter
 
 from PyQt5 import uic, QtSql
-from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
+from PyQt5.QtCore import QItemSelectionModel
+from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
+    QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
     QMessageBox, QPushButton
 from openpyxl import load_workbook
@@ -38,7 +40,7 @@ class MainWindow(QMainWindow):
             self.importWinBtn.setEnabled(False)
             self.print_int_btn.setEnabled(False)
         self.db_view_win = DBViewWindow()
-        self.importForm = ImportForm()
+        self.importForm = ImportForm(self.DB_Name)
         self.printForm = PrintInvForm()
         self.importWinBtn.clicked.connect(self.run_import_from)
         self.ViewdbBtn.clicked.connect(self.run_db_view)
@@ -201,8 +203,14 @@ class ImportForm(QWidget, Ui_ImportForm):
         rows_between_lists = 10
         on_list = 0
         self.items_table.setColumnCount(len(columns))
-        con = sqlite3.connect(self.db_name_edit.text())
-        cursor = con.cursor()
+        # con = sqlite3.connect(self.db_name_edit.text())
+        # cursor = con.cursor()
+        self.model = QSqlRelationalTableModel(self)
+        self.model.setTable('goods')
+        self.model.select()
+        self.sm = QItemSelectionModel(self.model)
+        print(self.sm.selectedRows())
+
         while row <= the_sheet.max_row:
             # for row in range(8, 27): #the_sheet.max_row+1):
             if on_list >= rows_on_list:
