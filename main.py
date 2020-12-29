@@ -125,7 +125,8 @@ class DBViewWindow(QWidget):
         self.db = QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName(self.db_name)
         self.db.open()
-        self.model = QSqlRelationalTableModel(self, self.db)
+        # self.model = QSqlRelationalTableModel(self, self.db)
+        self.model = QSqlRelationalTableModel(self)
         self.model.setTable('goods')
         self.model.setRelation(5, QSqlRelation('statuses', 'id_status', 'status_name'))
         self.model.setRelation(6, QSqlRelation('goods_types', 'id_goods_type', 'goods_type_name'))
@@ -166,8 +167,17 @@ class ImportForm(QWidget, Ui_ImportForm):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
-            jjj
-            self.not_braked = False
+            msg = QMessageBox()
+            msg.setWindowTitle("Запрос")
+            msg.setText("Прервать операцию импорта?")
+            msg.setInformativeText("")
+            msg.setDetailedText("")
+            result = msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            retval = msg.exec_()
+            if retval == QMessageBox.Yes:
+                self.not_braked = False
+            else:
+                self.not_braked = True
 
     def get_db_filename(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "БД для куда импортируем")
@@ -235,7 +245,7 @@ class ImportForm(QWidget, Ui_ImportForm):
                       f"{name.value},{inv_num.value}")
             row += 1
             on_list += 1
-
+            # self.keyPressEvent()
         self.items_table.repaint()
         con.close()
         # print(the_sheet['A28'].value)
