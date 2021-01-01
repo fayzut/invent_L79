@@ -4,11 +4,12 @@ import sqlite3
 import sys
 import xlsxwriter
 
-from PyQt5 import uic
-from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, QSqlRelationalDelegate
+from PyQt5 import uic, QtGui
+from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
+    QSqlRelationalDelegate, QSqlQueryModel, QSqlQuery, QSqlTableModel
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
-    QMessageBox
-from PyQt5.QtCore import Qt
+    QMessageBox, QTableWidget, QLineEdit, QDataWidgetMapper, QAbstractItemDelegate, QComboBox
+from PyQt5.QtCore import Qt, QModelIndex
 from openpyxl import load_workbook
 from urllib.parse import quote
 
@@ -115,9 +116,50 @@ class PrintInvForm(QWidget):
             msg.exec_()
 
 
+class EditForm(QWidget):
+    def __init__(self, database, current_index, model):
+        super().__init__()
+        uic.loadUi('editForm.ui', self)
+        self.db = database
+        self.db_map = QDataWidgetMapper()
+        self.db_map.setModel(current_index.model())
+        self.db_map.addMapping(self.lineEdit_name, 1)
+        self.db_map.addMapping(self.lineEdit_inv_number, 2)
+        self.db_map.addMapping(self.textEdit_comments, 3)
+        self.db_map.addMapping(self.checkBox_on_balance, 4)
+
+        # self.db_map.addMapping(self.comboBox_status, 5)
+        # self.comboBox_status = QComboBox()#.setModel()
+        self.model_statuses = QSqlRelationalTableModel(self)
+        self.model_statuses.setTable('statuses')
+        self.model_statuses.select()
+        #добавить выбор Элемента чтобы выбирался в Комбобоксе
+        self.comboBox_status.setModel(self.model_statuses)
+        self.comboBox_status.setModelColumn(1)
+        # self.comboBox_status.addItems(["uuu","123"])
+        # self.model.setRelation(6, QSqlRelation('goods_types', 'id_goods_type', 'goods_type_name'))
+        # self.model.setRelation(7, QSqlRelation('goods_subtypes', 'id_goods_subtype',
+        #                                        'goods_subtype_name'))
+        # self.model.setRelation(8, QSqlRelation('location', 'id_location', 'location_name'))
+        # self.model.setRelation(9, QSqlRelation('responsibles', 'id_responsible', 'FIO'))
+
+        self.pushBtn_save.clicked.connect(self.save_item)
+        self.pushBtn_cancel.clicked.connect(self.cancel)
+        # self.lineEdit_inv_number = QLineEdit()
+        # self.lineEdit_inv_number.text()
+        self.db_map.setCurrentIndex(current_index.row())
+
+    def save_item(self):
+        pass
+
+    def cancel(self):
+        pass
+
+
 class DBViewWindow(QWidget):
     def __init__(self, database_name):
         super().__init__()
+        self.tableView = QTableWidget()
         uic.loadUi('db_view.ui', self)
         self.db_name = database_name
         # Подключение БД к таблице отображения
@@ -135,8 +177,21 @@ class DBViewWindow(QWidget):
         self.model.setRelation(8, QSqlRelation('location', 'id_location', 'location_name'))
         self.model.setRelation(9, QSqlRelation('responsibles', 'id_responsible', 'FIO'))
         self.refresh()
+        self.tableView.doubleClicked.connect(self.table_clicked)
+        # self.tableView.clicked.connect()
         self.refreshBtn.clicked.connect(self.refresh)
         self.save_all_btn.clicked.connect(self.submitall)
+
+    def table_clicked(self):
+        row = self.tableView.currentIndex().row()
+        if row != -1:
+            self.tableView.selectRow(row)
+        for index in self.tableView.selectedIndexes():
+            print(index.model(), end=' - ')
+
+            print(index.data())
+        self.edit_form = EditForm(self.db, index, self.model)
+        self.edit_form.show()
 
     # Предположительно на выходе будет закрываться БД
     def __exit__(self, exc_type, exc_val, exc_tb):
