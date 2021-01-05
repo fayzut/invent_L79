@@ -8,11 +8,14 @@ from PyQt5 import uic, QtGui
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
     QSqlRelationalDelegate, QSqlQueryModel, QSqlQuery, QSqlTableModel
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
-    QMessageBox, QTableWidget, QLineEdit, QDataWidgetMapper, QAbstractItemDelegate, QComboBox
+    QMessageBox, QTableWidget, QLineEdit, QDataWidgetMapper, QAbstractItemDelegate, QComboBox, \
+    QTableView
 from PyQt5.QtCore import Qt, QModelIndex
 from openpyxl import load_workbook
 from urllib.parse import quote
 
+from db_view import Ui_DB_View_Form
+from editForm import Ui_EditForm
 from importForm import Ui_ImportForm
 
 
@@ -116,51 +119,72 @@ class PrintInvForm(QWidget):
             msg.exec_()
 
 
-class EditForm(QWidget):
-    def __init__(self, database, current_index, model):
+class EditForm(QWidget, Ui_EditForm):
+    def __init__(self, database, current_index, model=QSqlRelationalTableModel):
         super().__init__()
-        uic.loadUi('editForm.ui', self)
+        # uic.loadUi('editForm.ui', self)
+        self.setupUi(self)
         self.db = database
-        self.db_map = QDataWidgetMapper()
-        self.db_map.setModel(current_index.model())
+
+        self.db_map = QDataWidgetMapper(self)
+        self.db_map.setModel(model)
+        self.db_map.setSubmitPolicy(QDataWidgetMapper.ManualSubmit)
         self.db_map.addMapping(self.lineEdit_name, 1)
         self.db_map.addMapping(self.lineEdit_inv_number, 2)
         self.db_map.addMapping(self.textEdit_comments, 3)
-        self.db_map.addMapping(self.checkBox_on_balance, 4)
+        self.db_map.addMapping(self.checkBox_on_balance, model.fieldIndex('is_on_balance'))
 
-        # self.db_map.addMapping(self.comboBox_status, 5)
-        # self.comboBox_status = QComboBox()#.setModel()
-        self.model_statuses = QSqlRelationalTableModel(self)
-        self.model_statuses.setTable('statuses')
-        self.model_statuses.select()
-        #добавить выбор Элемента чтобы выбирался в Комбобоксе
-        self.comboBox_status.setModel(self.model_statuses)
-        self.comboBox_status.setModelColumn(1)
-        # self.comboBox_status.addItems(["uuu","123"])
-        # self.model.setRelation(6, QSqlRelation('goods_types', 'id_goods_type', 'goods_type_name'))
-        # self.model.setRelation(7, QSqlRelation('goods_subtypes', 'id_goods_subtype',
-        #                                        'goods_subtype_name'))
-        # self.model.setRelation(8, QSqlRelation('location', 'id_location', 'location_name'))
-        # self.model.setRelation(9, QSqlRelation('responsibles', 'id_responsible', 'FIO'))
+        relModel_status = model.relationModel(5)
+        self.comboBox_status.setModel(relModel_status)
+        self.comboBox_status.setModelColumn(relModel_status.fieldIndex("status_name"))
+        self.db_map.setItemDelegate(QSqlRelationalDelegate(self))
+        self.db_map.addMapping(self.comboBox_status, 5)
+
+        relModel_type = model.relationModel(6)
+        self.comboBox_type.setModel(relModel_type)
+        self.comboBox_type.setModelColumn(relModel_type.fieldIndex("goods_type_name"))
+        self.db_map.setItemDelegate(QSqlRelationalDelegate(self))
+        self.db_map.addMapping(self.comboBox_type, 6)
+
+        relModel_subtype = model.relationModel(7)
+        self.comboBox_subtype.setModel(relModel_subtype)
+        self.comboBox_subtype.setModelColumn(relModel_subtype.fieldIndex("goods_subtype_name"))
+        self.db_map.setItemDelegate(QSqlRelationalDelegate(self))
+        self.db_map.addMapping(self.comboBox_subtype, 7)
+
+        relModel_location = model.relationModel(8)
+        self.comboBox_location.setModel(relModel_location)
+        self.comboBox_location.setModelColumn(relModel_location.fieldIndex("location_name"))
+        self.db_map.setItemDelegate(QSqlRelationalDelegate(self))
+        self.db_map.addMapping(self.comboBox_location, 8)
+
+        relModel_responsible = model.relationModel(9)
+        self.comboBox_responsible.setModel(relModel_responsible)
+        self.comboBox_responsible.setModelColumn(relModel_responsible.fieldIndex("FIO"))
+        self.db_map.setItemDelegate(QSqlRelationalDelegate(self))
+        self.db_map.addMapping(self.comboBox_responsible, 9)
 
         self.pushBtn_save.clicked.connect(self.save_item)
         self.pushBtn_cancel.clicked.connect(self.cancel)
-        # self.lineEdit_inv_number = QLineEdit()
-        # self.lineEdit_inv_number.text()
+        self.pushBtn_next.clicked.connect(self.db_map.toNext)
+        self.pushBtn_prev.clicked.connect(self.db_map.toPrevious)
+        self.pushBtn_close.clicked.connect(self.close)
+
         self.db_map.setCurrentIndex(current_index.row())
 
     def save_item(self):
-        pass
+        self.db_map.submit()
 
     def cancel(self):
-        pass
+        self.db_map.setCurrentIndex(self.db_map.currentIndex())
 
 
-class DBViewWindow(QWidget):
+class DBViewWindow(QWidget, Ui_DB_View_Form):
     def __init__(self, database_name):
         super().__init__()
-        self.tableView = QTableWidget()
-        uic.loadUi('db_view.ui', self)
+        # self.tableView = QTableView()
+        # uic.loadUi('db_view.ui', self)
+        self.setupUi(self)
         self.db_name = database_name
         # Подключение БД к таблице отображения
         # Подключение через QSqlRelationalTableModel
@@ -186,10 +210,12 @@ class DBViewWindow(QWidget):
         row = self.tableView.currentIndex().row()
         if row != -1:
             self.tableView.selectRow(row)
-        for index in self.tableView.selectedIndexes():
-            print(index.model(), end=' - ')
-
-            print(index.data())
+        # for index in self.tableView.selectedIndexes():
+        #     print(index.model(), end=' - ')
+        #
+        #     print(index.data())
+        index = self.tableView.currentIndex()
+        # print(index.data())
         self.edit_form = EditForm(self.db, index, self.model)
         self.edit_form.show()
 

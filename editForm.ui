@@ -55,34 +55,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QTextEdit" name="textEdit_comments">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>110</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>22</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="QCheckBox" name="checkBox_on_balance">
        <property name="text">
@@ -167,6 +139,9 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QPlainTextEdit" name="textEdit_comments"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -186,6 +161,20 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushBtn_prev">
+       <property name="text">
+        <string>Prev</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushBtn_next">
+       <property name="text">
+        <string>Next</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -200,6 +189,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushBtn_close">
+       <property name="text">
+        <string>Закрыть</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
