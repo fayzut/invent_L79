@@ -2,17 +2,16 @@
 # Выбор файла БД и режима дальнейшей работы
 import sqlite3
 import sys
-import xlsxwriter
-
-from PyQt5 import uic, QtGui
-from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
-    QSqlRelationalDelegate, QSqlQueryModel, QSqlQuery, QSqlTableModel
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
-    QMessageBox, QTableWidget, QLineEdit, QDataWidgetMapper, QAbstractItemDelegate, QComboBox, \
-    QTableView
-from PyQt5.QtCore import Qt, QModelIndex
-from openpyxl import load_workbook
 from urllib.parse import quote
+
+import xlsxwriter
+from PyQt5 import uic
+from PyQt5.QtCore import Qt
+from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
+    QSqlRelationalDelegate
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
+    QMessageBox, QDataWidgetMapper
+from openpyxl import load_workbook
 
 from db_view import Ui_DB_View_Form
 from editForm import Ui_EditForm
@@ -120,7 +119,7 @@ class PrintInvForm(QWidget):
 
 
 class EditForm(QWidget, Ui_EditForm):
-    def __init__(self, database, current_index, model=QSqlRelationalTableModel):
+    def __init__(self, database, current_index, model):
         super().__init__()
         # uic.loadUi('editForm.ui', self)
         self.setupUi(self)
@@ -182,7 +181,6 @@ class EditForm(QWidget, Ui_EditForm):
 class DBViewWindow(QWidget, Ui_DB_View_Form):
     def __init__(self, database_name):
         super().__init__()
-        # self.tableView = QTableView()
         # uic.loadUi('db_view.ui', self)
         self.setupUi(self)
         self.db_name = database_name
@@ -191,7 +189,6 @@ class DBViewWindow(QWidget, Ui_DB_View_Form):
         self.db = QSqlDatabase.addDatabase('QSQLITE')
         self.db.setDatabaseName(self.db_name)
         self.db.open()
-        # self.model = QSqlRelationalTableModel(self, self.db)
         self.model = QSqlRelationalTableModel(self)
         self.model.setTable('goods')
         self.model.setRelation(5, QSqlRelation('statuses', 'id_status', 'status_name'))
@@ -210,12 +207,7 @@ class DBViewWindow(QWidget, Ui_DB_View_Form):
         row = self.tableView.currentIndex().row()
         if row != -1:
             self.tableView.selectRow(row)
-        # for index in self.tableView.selectedIndexes():
-        #     print(index.model(), end=' - ')
-        #
-        #     print(index.data())
         index = self.tableView.currentIndex()
-        # print(index.data())
         self.edit_form = EditForm(self.db, index, self.model)
         self.edit_form.show()
 
@@ -309,18 +301,6 @@ class ImportForm(QWidget, Ui_ImportForm):
                     self.items_table.setItem(self.items_table.rowCount() - 1, i, QTableWidgetItem(
                         str(item)))
                 all_goods.append(tuple([name.value, inv_num.value]))
-                # exists_in_DB = cursor.execute(f"SELECT * FROM goods "
-                #                               f"WHERE invent_number='{inv_num.value}'").fetchone()
-                # if not exists_in_DB:
-                #     que = f"INSERT INTO goods(goods_name, invent_number) " \
-                #           f"VALUES ('{name.value}','{inv_num.value}')"
-                # else:
-                #     print(f"ВНИМАНИЕ!!! ВОЗМОЖНА Замена существующих данных!\n"
-                #           f"{name.value} - {inv_num.value}\n"
-                #           f"------------------------------")
-                #     que = f"UPDATE goods " \
-                #           f"SET goods_name = '{name.value}' " \
-                #           f"WHERE invent_number = '{inv_num.value}'"
             else:
                 print(f"{no.value} != {len(values) + 1}\n"
                       f"the data is not added:\n"
