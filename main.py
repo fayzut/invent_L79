@@ -16,6 +16,7 @@ from openpyxl import load_workbook
 from db_view import Ui_DB_View_Form
 from editForm import Ui_EditForm
 from importForm import Ui_ImportForm
+from tablesEditForm import Ui_TablesEditForm
 
 
 class Database:
@@ -26,13 +27,41 @@ class Database:
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
         # БД по умолчанию
         self.DB_Name = 'inventarizaciya10.db'
+        # self.tablesBox = QComboBox()
+
         uic.loadUi('mainWindow.ui', self)
+        # Подключение БД к таблице отображения
+        # Подключение через QSqlRelationalTableModel
+        self.db = QSqlDatabase.addDatabase('QSQLITE')
+        self.db.setDatabaseName(self.DB_Name)
+        self.db.open()
+
         self.importWinBtn.clicked.connect(self.run_import_from)
         self.ViewdbBtn.clicked.connect(self.run_db_view)
         self.print_int_btn.clicked.connect(self.run_print_inv_form)
         self.file_open_btn.clicked.connect(self.openfile)
+        self.tablesEditBtn.clicked.connect(self.open_tables_edit_form)
+        connection = sqlite3.connect(self.DB_Name)
+        query = f"SELECT name FROM sqlite_master WHERE type='table'; "
+        res = connection.cursor().execute(query).fetchall()
+        connection.close()
+        items = []
+        for table in res:
+            items.extend(table)
+        self.tablesBox.addItems(items[-2:0:-1])
+        self.tablesBox.setCurrentIndex(-1)
+
+    def open_tables_edit_form(self):
+        if self.tablesBox.currentText() != 'goods':
+            self.tables_edit_form = TablesEditFrom(self.DB_Name, self.tablesBox.currentText())
+            self.tables_edit_form.show()
+        elif self.tablesBox.currentText() == 'goods':
+            self.run_db_view()
+        else:
+            QMessageBox.critical(self, 'Ошибка!!!', "Выберите таблицу!")
 
     def openfile(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -183,12 +212,12 @@ class DBViewWindow(QWidget, Ui_DB_View_Form):
         super().__init__()
         # uic.loadUi('db_view.ui', self)
         self.setupUi(self)
-        self.db_name = database_name
-        # Подключение БД к таблице отображения
-        # Подключение через QSqlRelationalTableModel
-        self.db = QSqlDatabase.addDatabase('QSQLITE')
-        self.db.setDatabaseName(self.db_name)
-        self.db.open()
+        # self.db_name = database_name
+        # # Подключение БД к таблице отображения
+        # # Подключение через QSqlRelationalTableModel
+        # self.db = QSqlDatabase.addDatabase('QSQLITE')
+        # self.db.setDatabaseName(self.db_name)
+        # self.db.open()
         self.model = QSqlRelationalTableModel(self)
         self.model.setTable('goods')
         self.model.setRelation(5, QSqlRelation('statuses', 'id_status', 'status_name'))
@@ -214,6 +243,7 @@ class DBViewWindow(QWidget, Ui_DB_View_Form):
     # Предположительно на выходе будет закрываться БД
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.db.close()
+        super().__exit__()
 
     def refresh(self):
         self.model.select()
@@ -321,6 +351,33 @@ class ImportForm(QWidget, Ui_ImportForm):
         con.close()
         # print(the_sheet['A28'].value)
         print("Импортировано записей:", len(values))
+
+
+class TablesEditFrom(QWidget, Ui_TablesEditForm):
+    def __init__(self, db_name, table_name):
+        super().__init__()
+        # uic.loadUi('tablesEditForm.ui', self)
+        self.setupUi(self)
+        self.close_btn.clicked.connect(self.close)
+        self.delete_btn.clicked.connect(self.delete_item)
+        self.add_btn.clicked.connect(self.add_item)
+        self.db = QSqlDatabase.addDatabase('QSQLITE')
+        self.db.setDatabaseName(db_name)
+        self.db.open()
+        self.db_model = QSqlRelationalTableModel(self)
+        self.db_model.setTable(table_name)
+        self.db_model.select()
+        self.tableView.setModel(self.db_model)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.db.close()
+        super().__exit__()
+
+    def delete_item(self):
+        pass
+
+    def add_item(self):
+        pass
 
 
 def except_hook(cls, exception, traceback):

@@ -34,6 +34,8 @@ class Ui_DB_View_Form(object):
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
         self.tableView = QtWidgets.QTableView(DB_View_Form)
+        self.tableView.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.tableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tableView.setObjectName("tableView")
         self.verticalLayout.addWidget(self.tableView)
         self.verticalLayout_2.addLayout(self.verticalLayout)
