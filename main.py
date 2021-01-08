@@ -6,11 +6,11 @@ from urllib.parse import quote
 
 import xlsxwriter
 from PyQt5 import uic
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QModelIndex
 from PyQt5.QtSql import QSqlDatabase, QSqlRelationalTableModel, QSqlRelation, \
     QSqlRelationalDelegate
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QTableWidgetItem, QFileDialog, \
-    QMessageBox, QDataWidgetMapper
+    QMessageBox, QDataWidgetMapper, QComboBox
 from openpyxl import load_workbook
 
 from db_view import Ui_DB_View_Form
@@ -33,6 +33,7 @@ class MainWindow(QMainWindow):
         # self.tablesBox = QComboBox()
 
         uic.loadUi('mainWindow.ui', self)
+        self.DB_Name = self.db_filename.text()
         # Подключение БД к таблице отображения
         # Подключение через QSqlRelationalTableModel
         self.db = QSqlDatabase.addDatabase('QSQLITE')
@@ -55,13 +56,15 @@ class MainWindow(QMainWindow):
         self.tablesBox.setCurrentIndex(-1)
 
     def open_tables_edit_form(self):
-        if self.tablesBox.currentText() != 'goods':
+        if self.tablesBox.currentText() == "":
+            QMessageBox.critical(self, 'Ошибка!!!', "Выберите таблицу!")
+        elif self.tablesBox.currentText() != 'goods':
             self.tables_edit_form = TablesEditFrom(self.DB_Name, self.tablesBox.currentText())
             self.tables_edit_form.show()
         elif self.tablesBox.currentText() == 'goods':
             self.run_db_view()
         else:
-            QMessageBox.critical(self, 'Ошибка!!!', "Выберите таблицу!")
+            pass
 
     def openfile(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -148,11 +151,11 @@ class PrintInvForm(QWidget):
 
 
 class EditForm(QWidget, Ui_EditForm):
-    def __init__(self, database, current_index, model):
+    def __init__(self, current_index, model):
         super().__init__()
         # uic.loadUi('editForm.ui', self)
         self.setupUi(self)
-        self.db = database
+        # self.db = database
 
         self.db_map = QDataWidgetMapper(self)
         self.db_map.setModel(model)
@@ -237,7 +240,7 @@ class DBViewWindow(QWidget, Ui_DB_View_Form):
         if row != -1:
             self.tableView.selectRow(row)
         index = self.tableView.currentIndex()
-        self.edit_form = EditForm(self.db, index, self.model)
+        self.edit_form = EditForm(index, self.model)
         self.edit_form.show()
 
     # Предположительно на выходе будет закрываться БД
@@ -374,10 +377,11 @@ class TablesEditFrom(QWidget, Ui_TablesEditForm):
         super().__exit__()
 
     def delete_item(self):
-        pass
+        self.db_model.deleteRowFromTable(self.tableView.currentIndex().row())
+        self.db_model.select()
 
     def add_item(self):
-        pass
+        self.db_model.insertRow(self.db_model.rowCount())
 
 
 def except_hook(cls, exception, traceback):

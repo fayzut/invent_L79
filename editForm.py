@@ -15,7 +15,7 @@ class Ui_EditForm(object):
     def setupUi(self, EditForm):
         EditForm.setObjectName("EditForm")
         EditForm.setWindowModality(QtCore.Qt.ApplicationModal)
-        EditForm.resize(700, 397)
+        EditForm.resize(700, 479)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -113,7 +113,7 @@ class Ui_EditForm(object):
 
     def retranslateUi(self, EditForm):
         _translate = QtCore.QCoreApplication.translate
-        EditForm.setWindowTitle(_translate("EditForm", "Form"))
+        EditForm.setWindowTitle(_translate("EditForm", "Редактирование записи"))
         self.label_2.setText(_translate("EditForm", "Инвентарный номер"))
         self.label.setText(_translate("EditForm", "Наименование"))
         self.label_3.setText(_translate("EditForm", "Комментарий"))
