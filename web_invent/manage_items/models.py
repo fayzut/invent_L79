@@ -28,7 +28,7 @@ class Responsible(models.Model):
     name = models.CharField('ФИО отвественного', max_length=50)
 
 
-class Goods(models.Model):
+class Good(models.Model):
     name = models.CharField('Наименование', max_length=50)
     inv_number = models.CharField("Инвентарный номер", max_length=30, unique=True, blank=True)
     comment = models.TextField('Примечание', max_length=1500)
