@@ -1,9 +1,9 @@
 from flask import Flask, render_template, redirect
-
+from data import db_session
 from loginform import LoginForm
 
 main_app = Flask(__name__)
-main_app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+main_app.config['SECRET_KEY'] = 'yandex_lyceum_project_secret_key'
 
 
 @main_app.route('/')
@@ -22,5 +22,10 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
-if __name__ == '__main__':
+def main():
+    db_session.global_init('db/invent_db.sqlite')
     main_app.run(port=8000, host='127.0.0.1')
+
+
+if __name__ == '__main__':
+    main()
