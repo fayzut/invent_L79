@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect
 from data import db_session
+from data.models import Good
 from loginform import LoginForm
 
 main_app = Flask(__name__)
@@ -9,9 +10,11 @@ main_app.config['SECRET_KEY'] = 'yandex_lyceum_project_secret_key'
 @main_app.route('/')
 @main_app.route('/index')
 def index():
-    user = "Ученик Яндекс.Лицея"
-    return render_template('index.html', title='Домашняя страница',
-                           username=user)
+    db_ses = db_session.create_session()
+
+    user = db_ses.query(Good).all()
+    return render_template('index.html', title='Главная',
+                           goods=user)
 
 
 @main_app.route('/login', methods=['GET', 'POST'])
@@ -23,7 +26,7 @@ def login():
 
 
 def main():
-    db_session.global_init('db/invent_db.sqlite')
+    db_session.global_init('db/inventarizaciya10.db')
     main_app.run(port=8000, host='127.0.0.1')
 
 
