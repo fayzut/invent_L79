@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Добавление вещи</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control", type="name") }}<br>
+        {% for error in form.name.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.invent_number.label }}<br>
+        {{ form.invent_number(class="form-control", type="invent_number") }}<br>
+        {% for error in form.invent_number.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.comment.label }}<br>
+        {{ form.comment(class="form-control", type="comment") }}<br>
+        {% for error in form.comment.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+    </p>
+    <p>{{ form.is_on_balance() }} {{ form.is_on_balance.label }}</p>
+    <!--  добавить остальные зависимые поля. пока они заполняются по умолчанию нулями-->
+
+    <p>
+        {{ form.bought_date.label }}<br>
+        {{ form.bought_date(class="form-control", type="bought_date") }}<br>
+        {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.can_be_used.label }}<br>
+        {{ form.can_be_used(class="form-control", type="can_be_used") }}<br>
+        {% for error in form.can_be_used.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}
+        <!--        {{ form.cancel(type="submit", class="btn btn-warning") }}-->
+        <a href="/" class="btn btn-warning">Отмена</a>
+    </p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}

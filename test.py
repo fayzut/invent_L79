@@ -1,1 +1,3 @@
-print(f'{5/3:.4}')
+import sys
+
+sys.stdin.readline()

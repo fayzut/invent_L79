@@ -2,15 +2,34 @@
 
 {% block content %}
     <h1>Записи в БД</h1>
-{% for item in goods%}
 <div class="col-md6 border rounded">
-    <h2>{{item.title}}</h2>
-    <div>
-        {{item.content}}
-    </div>
-    <div>
-        Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
-    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Название</th>
+            <th>Инвентарный номер</th>
+            <th>Комментарии</th>
+            <th>На балансе</th>
+            <th>...</th>
+            <th>Дата приобретения</th>
+            <th>Время пользования</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in goods%}
+        <tr>
+            <th>{{item.id}}</th>
+            <td>{{item.name}}</td>
+            <td>{{item.invent_number}}</td>
+            <td>{{item.comment}}</td>
+            <td>{{'Да' if item.is_on_balance else 'Нет'}}</td>
+            <td>...</td>
+            <td>{{item.bought_date}}</td>
+            <td>{{item.can_be_used}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
-{% endfor %}
 {% endblock %}
