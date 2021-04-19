@@ -102,10 +102,13 @@ def new_item_type():
 # @login_required
 def new_item_subtype():
     form = NewItemSubtype()
+    db_ses = db_session.create_session()
+    form.type_id.choices = [(choice.id, choice.name) for choice in db_ses.query(ItemType).all()]
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         newtype = ItemSubtype()
         newtype.name = form.name.data
+        newtype.type_id = form.type_id.data
         db_sess.add(newtype)
         db_sess.commit()
         return redirect('/new_good')
