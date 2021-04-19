@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import Flask, render_template, redirect
 from data import db_session
 from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
-from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype
+from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
 from flask_login import login_user, logout_user, login_required, LoginManager
 
 main_app = Flask(__name__)
@@ -147,6 +147,20 @@ def login():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@main_app.route('/import', methods=['GET', 'POST'])
+@login_required
+def import_from_file():
+    form = Import()
+    db_ses = db_session.create_session()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+
+        # db_sess.add(newtype)
+        # db_sess.commit()
+        return redirect('/')
+    return render_template('new_property_id_name.html', title='Импорт из файла', form=form)
 
 
 def main():
