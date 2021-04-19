@@ -11,7 +11,11 @@
             <th>Инвентарный номер</th>
             <th>Комментарии</th>
             <th>На балансе</th>
-            <th>...</th>
+            <th>Статус</th>
+            <th>Тип</th>
+            <th>Подтип</th>
+            <th>Место</th>
+            <th>Ответственный</th>
             <th>Дата приобретения</th>
             <th>Время пользования</th>
         </tr>
@@ -24,7 +28,11 @@
             <td>{{item.invent_number}}</td>
             <td>{{item.comment}}</td>
             <td>{{'Да' if item.is_on_balance else 'Нет'}}</td>
-            <td>...</td>
+            <td>{{ item.status.name }}</td>
+            <td>{{ item.item_type.name }}</td>
+            <td>{{ item.item_subtype.name }}</td>
+            <td>{{ item.location.name }}</td>
+            <td>{{ item.responsible.name }}</td>
             <td>{{item.bought_date}}</td>
             <td>{{item.can_be_used}}</td>
         </tr>

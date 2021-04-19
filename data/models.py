@@ -2,39 +2,16 @@ import datetime
 
 import sqlalchemy
 from flask_login import UserMixin
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from .db_session import SqlAlchemyBase
 
 
-class Good(SqlAlchemyBase):
-    __tablename__ = 'goods'
+class Condition(SqlAlchemyBase):
+    __tablename__ = 'condition'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    # Инвентарный номер
-    invent_number = sqlalchemy.Column(sqlalchemy.String, nullable=True, unique=True)
-    # Примечание: описание текстом
-    comment = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    # Баланс/Забаланс - ?
-    is_on_balance = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
-    # Состояние - ид_состояние
-    status_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("condition.id"))
-    # Тип - ид_тип_имущества
-    item_type_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("item_type.id"))
-    #     Подтип - ид_подтип_имущества
-    item_subtype_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey(
-        "item_subtype.id"))
-    # Местонахождение - ид_место
-    location_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("location.id"))
-    # Ответственный - ид_ответственного
-    responsible_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("user.id"))
-    # !!! Часть комплекта: ид_комплекта - не реализовано
-    #  # Не реализовано
-
-    # Дата приобретения
-    bought_date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now().date())
-    # Время эксплуатации (через сколько можно списывать)
-    can_be_used = sqlalchemy.Column(sqlalchemy.Integer, default=5)
 
 
 class User(SqlAlchemyBase, UserMixin):
@@ -54,12 +31,6 @@ class User(SqlAlchemyBase, UserMixin):
         return check_password_hash(self.hashed_password, password)
 
 
-class Condition(SqlAlchemyBase):
-    __tablename__ = 'condition'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-
-
 class Location(SqlAlchemyBase):
     __tablename__ = 'location'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -77,3 +48,38 @@ class ItemSubtype(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     type_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('item_type.id'))
+
+
+class Good(SqlAlchemyBase):
+    __tablename__ = 'goods'
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    # Инвентарный номер
+    invent_number = sqlalchemy.Column(sqlalchemy.String, nullable=True, unique=True)
+    # Примечание: описание текстом
+    comment = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    # Баланс/Забаланс - ?
+    is_on_balance = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    # Состояние - ид_состояние
+    status_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("condition.id"))
+    status = relationship(Condition)
+    # Тип - ид_тип_имущества
+    item_type_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("item_type.id"))
+    item_type = relationship(ItemType)
+    #     Подтип - ид_подтип_имущества
+    item_subtype_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey(
+        "item_subtype.id"))
+    item_subtype = relationship(ItemSubtype)
+    # Местонахождение - ид_место
+    location_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("location.id"))
+    location = relationship(Location)
+    # Ответственный - ид_ответственного
+    responsible_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("user.id"))
+    responsible = relationship(User)
+    # !!! Часть комплекта: ид_комплекта - не реализовано
+    #  # Не реализовано
+
+    # Дата приобретения
+    bought_date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now().date())
+    # Время эксплуатации (через сколько можно списывать)
+    can_be_used = sqlalchemy.Column(sqlalchemy.Integer, default=5)
