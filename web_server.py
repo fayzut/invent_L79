@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import Flask, render_template, redirect
 from data import db_session
-from data.models import Good, User
-from loginform import LoginForm, NewUser, NewGood
+from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
+from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype
 from flask_login import login_user, logout_user, login_required
 
 main_app = Flask(__name__)
@@ -40,6 +40,14 @@ def register_user():
 # @login_required
 def new_good():
     form = NewGood()
+    db_ses = db_session.create_session()
+    form.status_id.choices = [(choice.id, choice.name) for choice in db_ses.query(Condition).all()]
+    form.item_type_id.choices = [(choice.id, choice.name) for choice in
+                                 db_ses.query(ItemType).all()]
+    form.item_subtype_id.choices = [(choice.id, choice.name) for choice in db_ses.query(
+        ItemSubtype).all()]
+    form.location_id.choices = [(choice.id, choice.name) for choice in db_ses.query(Location).all()]
+    form.responsible_id.choices = [(choice.id, choice.name) for choice in db_ses.query(User).all()]
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         good = Good()
@@ -47,11 +55,11 @@ def new_good():
         good.invent_number = form.invent_number.data
         good.comment = form.comment.data
         good.is_on_balance = form.is_on_balance.data
-        good.status_id = form.status_id
-        good.item_type_id = form.item_type_id
-        good.item_subtype_id = form.item_subtype_id
-        good.location_id = form.location_id
-        good.responsible_id = form.responsible_id
+        good.status_id = form.status_id.data
+        good.item_type_id = form.item_type_id.data
+        good.item_subtype_id = form.item_subtype_id.data
+        good.location_id = form.location_id.data
+        good.responsible_id = form.responsible_id.data
         good.bought_date = form.bought_date.data
         good.can_be_used = form.can_be_used.data
         db_sess.add(good)
@@ -59,6 +67,49 @@ def new_good():
         return redirect('/')
 
     return render_template('new_good.html', title='Новая вещь', form=form)
+
+
+@main_app.route('/new_location', methods=['GET', 'POST'])
+# @login_required
+def new_location():
+    form = NewLocation()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        location = Location()
+        location.name = form.name.data
+        db_sess.add(location)
+        db_sess.commit()
+        return redirect('/new_good')
+
+    return render_template('new_property_id_name.html', title='Новое место', form=form)
+
+
+@main_app.route('/new_item_type', methods=['GET', 'POST'])
+# @login_required
+def new_item_type():
+    form = NewItemType()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        newtype = ItemType()
+        newtype.name = form.name.data
+        db_sess.add(newtype)
+        db_sess.commit()
+        return redirect('/new_good')
+    return render_template('new_property_id_name.html', title='Новый тип вещи', form=form)
+
+
+@main_app.route('/new_item_subtype', methods=['GET', 'POST'])
+# @login_required
+def new_item_subtype():
+    form = NewItemSubtype()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        newtype = ItemSubtype()
+        newtype.name = form.name.data
+        db_sess.add(newtype)
+        db_sess.commit()
+        return redirect('/new_good')
+    return render_template('new_property_id_name.html', title='Новый подтип вещи', form=form)
 
 
 @main_app.route('/login', methods=['GET', 'POST'])

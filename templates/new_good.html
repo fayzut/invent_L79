@@ -8,10 +8,10 @@
         {{ form.name.label }}<br>
         {{ form.name(class="form-control", type="name") }}<br>
         {% for error in form.name.errors %}
-        <div class="alert alert-danger" role="alert">
-            {{ error }}
-        </div>
-    {% endfor %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
     </p>
     <p>
         {{ form.invent_number.label }}<br>
@@ -20,7 +20,7 @@
         <div class="alert alert-danger" role="alert">
             {{ error }}
         </div>
-    {% endfor %}
+        {% endfor %}
     </p>
     <p>
         {{ form.comment.label }}<br>
@@ -29,10 +29,60 @@
         <div class="alert alert-danger" role="alert">
             {{ error }}
         </div>
-    {% endfor %}
+        {% endfor %}
     </p>
     <p>{{ form.is_on_balance() }} {{ form.is_on_balance.label }}</p>
-    <!--  добавить остальные зависимые поля. пока они заполняются по умолчанию нулями-->
+    <!--  добавить кнопку добавления зависимого поля-->
+    <p>
+        {{ form.status_id.label }}<br>
+        {{ form.status_id()}}
+            {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.item_type_id.label }}<br>
+        {{ form.item_type_id()}}
+        <a href="new_item_type" class="btn btn-secondary">+ тип</a>
+            {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.item_subtype_id.label }}<br>
+        {{ form.item_subtype_id()}}
+        <a href="new_item_subtype" class="btn btn-secondary">+ подтип</a>
+            {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.location_id.label }}<br>
+        {{ form.location_id(class="select selectpicker")}}
+        <a href="new_location" class="btn btn-secondary">+ место</a>
+            {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.responsible_id.label }}<br>
+        {{ form.responsible_id()}}
+        <a href="register" class="btn btn-secondary">Новый пользователь</a>
+            {% for error in form.bought_date.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+
 
     <p>
         {{ form.bought_date.label }}<br>
@@ -41,7 +91,7 @@
         <div class="alert alert-danger" role="alert">
             {{ error }}
         </div>
-    {% endfor %}
+        {% endfor %}
     </p>
     <p>
         {{ form.can_be_used.label }}<br>

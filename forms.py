@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, DateField, \
-    IntegerField
+    IntegerField, SelectField
 from wtforms.validators import DataRequired
 
 
@@ -27,10 +27,28 @@ class NewGood(FlaskForm):
     is_on_balance = BooleanField('На балансе', default=True)
     bought_date = DateField('Дата приобретения', format='%d.%m.%Y')
     can_be_used = IntegerField('Срок до возможного списания', default='5')
-    status_id = 0
-    item_type_id = 0
-    item_subtype_id = 0
-    location_id = 0
-    responsible_id = 0
+    status_id = SelectField('Работоспособность')
+    item_type_id = SelectField('Тип вещи')
+    item_subtype_id = SelectField('Подтип вещи')
+    location_id = SelectField('Местонахождение')
+    responsible_id = SelectField('Ответственный')
     submit = SubmitField('Добавить')
     cancel = SubmitField('Отмена')
+
+
+class NewPropertyWithIdName(FlaskForm):
+    name = StringField('Наименование', validators=[DataRequired()])
+    submit = SubmitField('Добавить')
+    cancel = SubmitField('Отмена')
+
+
+class NewLocation(NewPropertyWithIdName):
+    pass
+
+
+class NewItemType(NewPropertyWithIdName):
+    pass
+
+
+class NewItemSubtype(NewPropertyWithIdName):
+    type_id = SelectField('Тип вещи')
