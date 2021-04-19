@@ -4,10 +4,18 @@ from flask import Flask, render_template, redirect
 from data import db_session
 from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, LoginManager
 
 main_app = Flask(__name__)
 main_app.config['SECRET_KEY'] = 'yandex_lyceum_project_secret_key'
+login_manager = LoginManager()
+login_manager.init_app(main_app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 @main_app.route('/')
@@ -23,11 +31,15 @@ def register_user():
     form = NewUser()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
         user = User()
         user.name = form.name.data
         user.about = form.about.data
         user.email = form.email.data
-        user.hashed_password = form.password.data
+        user.set_password(form.password.data)
         user.created_date = datetime.now()
         db_sess.add(user)
         db_sess.commit()
@@ -37,7 +49,7 @@ def register_user():
 
 
 @main_app.route('/new_good', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def new_good():
     form = NewGood()
     db_ses = db_session.create_session()
@@ -70,7 +82,7 @@ def new_good():
 
 
 @main_app.route('/new_location', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def new_location():
     form = NewLocation()
     if form.validate_on_submit():
@@ -85,7 +97,7 @@ def new_location():
 
 
 @main_app.route('/new_item_type', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def new_item_type():
     form = NewItemType()
     if form.validate_on_submit():
@@ -99,7 +111,7 @@ def new_item_type():
 
 
 @main_app.route('/new_item_subtype', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def new_item_subtype():
     form = NewItemSubtype()
     db_ses = db_session.create_session()
