@@ -56,11 +56,11 @@ class NewItemSubtype(NewPropertyWithIdName):
 
 class Import(NewPropertyWithIdName):
     name = FileField('Файл ', validators=[DataRequired()])
-
+    submit = SubmitField('Добавить')
+    cancel = SubmitField('Отмена')
     '''
     def transform(text_file_contents):
     return text_file_contents.replace("=", ",")
-
 
 @app.route('/')
 def form():

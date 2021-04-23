@@ -83,3 +83,7 @@ class Good(SqlAlchemyBase):
     bought_date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now().date())
     # Время эксплуатации (через сколько можно списывать)
     can_be_used = sqlalchemy.Column(sqlalchemy.Integer, default=5)
+
+
+class Import:
+    filename = ''

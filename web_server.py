@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from data import db_session
 from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
@@ -149,18 +149,25 @@ def logout():
     return redirect("/")
 
 
+
 @main_app.route('/import', methods=['GET', 'POST'])
 @login_required
 def import_from_file():
-    form = Import()
+    form = Import(enctype="multipart/form-data")
     db_ses = db_session.create_session()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-
+        filename = form.name.data
+        file = request.files['data_file']
+        if not file:
+            return "No file"
+        file_contents = file.stream.read().decode("utf-8")
+        print(filename)
         # db_sess.add(newtype)
         # db_sess.commit()
         return redirect('/')
-    return render_template('new_property_id_name.html', title='Импорт из файла', form=form)
+    return render_template('file_upload.html', title='Импорт из файла', form=form)
+
 
 
 def main():
