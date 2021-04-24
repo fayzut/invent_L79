@@ -4,3 +4,4 @@ sqlalchemy
 wtforms
 flask-login
 werkzeug
+openpyxl

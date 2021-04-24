@@ -5,6 +5,7 @@ from data import db_session
 from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
 from flask_login import login_user, logout_user, login_required, LoginManager
+import openpyxl
 
 main_app = Flask(__name__)
 main_app.config['SECRET_KEY'] = 'yandex_lyceum_project_secret_key'
@@ -152,9 +153,7 @@ def logout():
 @main_app.route('/import', methods=['GET', 'POST'])
 @login_required
 def import_file():
-    form = Import(action="http://localhost:8080/import_file", method="POST",
-                  enctype="multipart/form-data")
-    import_from_file()
+    form = Import()
     return render_template('file_upload.html', title='Импорт из файла', form=form)
 
 @main_app.route('/import_file', methods=['GET', 'POST'])
@@ -165,6 +164,8 @@ def import_from_file():
         f = request.files["name"]
         if not f:
             print('No file')
+        workbook = openpyxl.load_workbook(f)
+        print(workbook.sheetnames)
         """
         Добавить обработку файла - возможно старая пойдет!!!
         """
