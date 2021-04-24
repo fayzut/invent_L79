@@ -149,24 +149,28 @@ def logout():
     return redirect("/")
 
 
-
 @main_app.route('/import', methods=['GET', 'POST'])
 @login_required
+def import_file():
+    form = Import(action="http://localhost:8080/import_file", method="POST",
+                  enctype="multipart/form-data")
+    import_from_file()
+    return render_template('file_upload.html', title='Импорт из файла', form=form)
+
+@main_app.route('/import_file', methods=['GET', 'POST'])
+@login_required
 def import_from_file():
-    form = Import(enctype="multipart/form-data")
-    db_ses = db_session.create_session()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        filename = form.name.data
-        file = request.files['data_file']
-        if not file:
-            return "No file"
-        file_contents = file.stream.read().decode("utf-8")
-        print(filename)
+    # db_ses = db_session.create_session()
+    if request.method == 'POST':
+        f = request.files["name"]
+        if not f:
+            print('No file')
+        """
+        Добавить обработку файла - возможно старая пойдет!!!
+        """
         # db_sess.add(newtype)
         # db_sess.commit()
         return redirect('/')
-    return render_template('file_upload.html', title='Импорт из файла', form=form)
 
 
 

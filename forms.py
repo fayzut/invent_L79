@@ -55,39 +55,5 @@ class NewItemSubtype(NewPropertyWithIdName):
 
 
 class Import(NewPropertyWithIdName):
-    name = FileField('Файл ', validators=[DataRequired()])
-    submit = SubmitField('Добавить')
-    cancel = SubmitField('Отмена')
-    '''
-    def transform(text_file_contents):
-    return text_file_contents.replace("=", ",")
-
-@app.route('/')
-def form():
-    return """
-        <html>
-            <body>
-                <h1>Transform a file demo</h1>
-
-                <form action="/transform" method="post" enctype="multipart/form-data">
-                    <input type="file" name="data_file" />
-                    <input type="submit" />
-                </form>
-            </body>
-        </html>
-    """
-
-@app.route('/transform', methods=["POST"])
-def transform_view():
-    file = request.files['data_file']
-    if not file:
-        return "No file"
-
-    file_contents = file.stream.read().decode("utf-8")
-
-    result = transform(file_contents)
-
-    response = make_response(result)
-    response.headers["Content-Disposition"] = "attachment; filename=result.csv"
-    return response
-   '''
+    file = FileField('Файл ', validators=[DataRequired()])
+    submit = SubmitField('Импорт')

@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>Загрузка Файла</h1>
-    <form action="" method="post">
+    <form action="/import_file" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
             {{ form.name.label }}<br>
-            {{ form.name(class="form-control", type="filename") }}<br>
+            {{ form.name(class="form-control-file", type="file") }}<br>
             {% for error in form.name.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
