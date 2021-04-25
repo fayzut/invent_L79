@@ -1,8 +1,10 @@
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, flash
+from openpyxl import Workbook
+
 from data import db_session
-from data.models import Good, User, Location, Condition, ItemType, ItemSubtype
+from data.models import *
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
 from flask_login import login_user, logout_user, login_required, LoginManager
 import openpyxl
@@ -11,6 +13,7 @@ main_app = Flask(__name__)
 main_app.config['SECRET_KEY'] = 'yandex_lyceum_project_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(main_app)
+for_import = ImportData()
 
 
 @login_manager.user_loader
@@ -152,33 +155,36 @@ def logout():
 
 @main_app.route('/import', methods=['GET', 'POST'])
 @login_required
-def import_file():
-    form = Import()
-    return render_template('file_upload.html', title='Импорт из файла', form=form)
-
-@main_app.route('/import_file', methods=['GET', 'POST'])
-@login_required
 def import_from_file():
-    # db_ses = db_session.create_session()
+    global for_import
+    form = Import()
     if request.method == 'POST':
-        f = request.files["name"]
-        if not f:
-            print('No file')
-        workbook = openpyxl.load_workbook(f)
-        print(workbook.sheetnames)
-        """
-        Добавить обработку файла - возможно старая пойдет!!!
-        """
-        # db_sess.add(newtype)
-        # db_sess.commit()
-        return redirect('/')
+        if request.form["submit"] == 'Загузить файл':
+            form.f = request.files["name"]
+            if not form.f:
+                print('No file')
+            for_import.workbook = openpyxl.load_workbook(form.f)
+            form.worksheets.choices = for_import.workbook.sheetnames
+            return render_template('file_upload.html', title='Импорт из файла', form=form)
+        elif request.form["submit"] == 'Импортировать данные':
+            for_import.worksheet = form.worksheets.data
+            print("Импортируем!!!")
+            db_ses = db_session.create_session()
+            for_import.parse_source(db_ses)
+            """
+            Добавить обработку файла - возможно старая пойдет!!!
+            """
 
+            return redirect('/')
+
+    return render_template('file_upload.html', title='Импорт из файла', form=form)
 
 
 def main():
     db_session.global_init('db/invent_db.sqlite')
-    main_app.run(port=8000, host='127.0.0.1')
+    main_app.run(port=8000, host='127.0.0.1', debug=True)
 
 
 if __name__ == '__main__':
+
     main()

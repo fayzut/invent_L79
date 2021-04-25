@@ -2,18 +2,22 @@
 
 {% block content %}
     <h1>Загрузка Файла</h1>
-    <form action="/import_file" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
+        <div class="form-group">
         <p>
-            {{ form.name.label }}<br>
-            {{ form.name(class="form-control-file", type="file") }}<br>
+            {% if not form.name.data %}
+            {{ form.name.label(class="form-control-label") }}<br>
+            {{ form.name(class="form-control-file") }}<br>
             {% for error in form.name.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
                 </div>
             {% endfor %}
-        </p>
 
+        </p>
+        <p>{{ form.submit(value='Загузить файл', class="btn btn-primary") }}</p>
+        {% else %}
         <p>
             {{ form.worksheets.label }}<br>
             {{ form.worksheets(class="form-control-file", type="select") }}<br>
@@ -23,8 +27,9 @@
                 </div>
             {% endfor %}
         </p>
-
-        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        <p>{{ form.submit(value="Импортировать данные", class="btn btn-primary") }}</p>
+        {% endif %}
         <div>{{ message }}</div>
+    </div>
     </form>
 {% endblock %}

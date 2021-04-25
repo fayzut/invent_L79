@@ -55,6 +55,7 @@ class NewItemSubtype(NewPropertyWithIdName):
 
 
 class Import(NewPropertyWithIdName):
-    file = FileField('Файл ', validators=[DataRequired()])
-    worksheets = SelectField("Лист с данными", choices=[], validate_choice=True)
-    submit = SubmitField('Импорт')
+    name = FileField('Выберите Файл', validators=[DataRequired()])
+    worksheets = SelectField("Выберите лист с данными", choices=[], validate_choice=True)
+    submit = SubmitField()
+    f = None
