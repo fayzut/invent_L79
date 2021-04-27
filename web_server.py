@@ -59,39 +59,8 @@ def register_user():
                            form=form)
 
 
-@main_app.route('/new_good', methods=['GET', 'POST'])
-@login_required
-def new_good():
-    form = NewGood()
-    db_ses = db_session.create_session()
-    form.status_id.choices = get_choises(db_ses, Condition)
-    form.item_type_id.choices = get_choises(db_ses, ItemType)
-    form.item_subtype_id.choices = get_choises(db_ses, ItemSubtype)
-    form.location_id.choices = get_choises(db_ses, Location)
-    form.responsible_id.choices = get_choises(db_ses, User)
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        good = Good()
-        good.name = form.name.data
-        good.invent_number = form.invent_number.data
-        good.comment = form.comment.data
-        good.is_on_balance = form.is_on_balance.data
-        good.status_id = form.status_id.data
-        good.item_type_id = form.item_type_id.data
-        good.item_subtype_id = form.item_subtype_id.data
-        good.location_id = form.location_id.data
-        good.responsible_id = form.responsible_id.data
-        good.bought_date = form.bought_date.data
-        good.can_be_used = form.can_be_used.data
-        db_sess.add(good)
-        db_sess.commit()
-        return redirect('/')
-
-    return render_template('new_good.html', title='Новая вещь', form=form)
-
-
 @main_app.route('/edit_good/<the_id>', methods=['GET', 'POST'])
-@main_app.route('/edit_good', methods=['GET', 'POST'])
+@main_app.route('/new_good', methods=['GET', 'POST'])
 @login_required
 def edit_good(the_id=None):
     db_ses = db_session.create_session()
