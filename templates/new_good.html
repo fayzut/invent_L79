@@ -35,7 +35,7 @@
     <!--  добавить кнопку добавления зависимого поля-->
     <p>
         {{ form.status_id.label }}<br>
-        {{ form.status_id()}}
+        {{ form.status_id(value=form.status_id.value)}}
             {% for error in form.bought_date.errors %}
         <div class="alert alert-danger" role="alert">
             {{ error }}
@@ -44,7 +44,7 @@
     </p>
     <p>
         {{ form.item_type_id.label }}<br>
-        {{ form.item_type_id()}}
+        {{ form.item_type_id(value=form.item_type_id.value)}}
         <a href="new_item_type" class="btn btn-secondary">+ тип</a>
             {% for error in form.bought_date.errors %}
         <div class="alert alert-danger" role="alert">

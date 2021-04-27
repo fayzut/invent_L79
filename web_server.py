@@ -17,6 +17,11 @@ login_manager.init_app(main_app)
 for_import = ImportData()
 
 
+def get_choises(session, table):
+    return [(choice.id, choice.name) for choice in
+            session.query(table).all()]
+
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
@@ -59,13 +64,58 @@ def register_user():
 def new_good():
     form = NewGood()
     db_ses = db_session.create_session()
-    form.status_id.choices = [(choice.id, choice.name) for choice in db_ses.query(Condition).all()]
-    form.item_type_id.choices = [(choice.id, choice.name) for choice in
-                                 db_ses.query(ItemType).all()]
-    form.item_subtype_id.choices = [(choice.id, choice.name) for choice in db_ses.query(
-        ItemSubtype).all()]
-    form.location_id.choices = [(choice.id, choice.name) for choice in db_ses.query(Location).all()]
-    form.responsible_id.choices = [(choice.id, choice.name) for choice in db_ses.query(User).all()]
+    form.status_id.choices = get_choises(db_ses, Condition)
+    form.item_type_id.choices = get_choises(db_ses, ItemType)
+    form.item_subtype_id.choices = get_choises(db_ses, ItemSubtype)
+    form.location_id.choices = get_choises(db_ses, Location)
+    form.responsible_id.choices = get_choises(db_ses, User)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        good = Good()
+        good.name = form.name.data
+        good.invent_number = form.invent_number.data
+        good.comment = form.comment.data
+        good.is_on_balance = form.is_on_balance.data
+        good.status_id = form.status_id.data
+        good.item_type_id = form.item_type_id.data
+        good.item_subtype_id = form.item_subtype_id.data
+        good.location_id = form.location_id.data
+        good.responsible_id = form.responsible_id.data
+        good.bought_date = form.bought_date.data
+        good.can_be_used = form.can_be_used.data
+        db_sess.add(good)
+        db_sess.commit()
+        return redirect('/')
+
+    return render_template('new_good.html', title='Новая вещь', form=form)
+
+
+@main_app.route('/edit_good/<the_id>', methods=['GET', 'POST'])
+@main_app.route('/edit_good', methods=['GET', 'POST'])
+@login_required
+def edit_good(the_id=None):
+    db_ses = db_session.create_session()
+    item = Good()
+    if the_id:
+        item = db_ses.query(Good).filter(Good.id == the_id).first()
+    form = NewGood()
+    form.name.data = item.name
+    form.invent_number.data = item.invent_number
+    form.comment.data = item.comment
+    form.is_on_balance.data = item.is_on_balance
+    form.status_id.choices = get_choises(db_ses, Condition)
+    form.status_id.default = item.status_id
+    form.item_type_id.choices = get_choises(db_ses, ItemType)
+    form.item_type_id.default = item.item_type_id
+    form.item_subtype_id.choices = get_choises(db_ses, ItemSubtype)
+    form.item_subtype_id.default = item.item_subtype_id
+    form.location_id.choices = get_choises(db_ses, Location)
+    form.location_id.default = item.location_id
+    form.responsible_id.choices = get_choises(db_ses, User)
+    form.responsible_id.default = item.responsible_id
+    form.bought_date.data = item.bought_date
+    form.can_be_used.data = item.can_be_used
+    # form.process()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         good = Good()
@@ -188,5 +238,4 @@ def main():
 
 
 if __name__ == '__main__':
-
     main()
