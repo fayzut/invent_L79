@@ -5,6 +5,7 @@ from openpyxl import Workbook
 
 from data import db_session
 from data.models import *
+from data.my_classes import ImportData
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
 from flask_login import login_user, logout_user, login_required, LoginManager
 import openpyxl
@@ -26,6 +27,7 @@ def load_user(user_id):
 @main_app.route('/index')
 def index():
     db_sess = db_session.create_session()
+    # db_sess.fl
     all_goods = db_sess.query(Good).all()
     return render_template('index.html', title='Главная', goods=all_goods)
 
