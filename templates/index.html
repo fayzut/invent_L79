@@ -23,7 +23,7 @@
         <tbody>
         {% for item in goods%}
         <tr>
-            <th>{{item.id}}</th>
+            <th><a href="/edit_good/{{item.id}}">{{item.id}}</a></th>
             <td>{{item.name}}</td>
             <td>{{item.invent_number}}</td>
             <td>{{item.comment}}</td>
@@ -35,6 +35,7 @@
             <td>{{ item.responsible.name }}</td>
             <td>{{item.bought_date}}</td>
             <td>{{item.can_be_used}}</td>
+
         </tr>
         {% endfor %}
         </tbody>

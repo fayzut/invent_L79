@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime as dt
 
 from flask import Flask, render_template, redirect, request, flash
 from openpyxl import Workbook
@@ -20,6 +20,15 @@ for_import = ImportData()
 def get_choises(session, table):
     return [(choice.id, choice.name) for choice in
             session.query(table).all()]
+
+
+@main_app.errorhandler(401)
+def page_not_found(e):
+    form = LoginForm()
+    return render_template('login.html',
+                           message="Для выполнения данной операции необходимо "
+                                   "авторизоваться",
+                           form=form), 401
 
 
 @login_manager.user_loader
@@ -51,7 +60,7 @@ def register_user():
         user.about = form.about.data
         user.email = form.email.data
         user.set_password(form.password.data)
-        user.created_date = datetime.now()
+        user.created_date = dt.now()
         db_sess.add(user)
         db_sess.commit()
         return redirect('/')

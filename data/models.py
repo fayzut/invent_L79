@@ -1,7 +1,9 @@
 import datetime
 
 import sqlalchemy
+from flask import render_template, redirect
 from flask_login import UserMixin
+from markupsafe import Markup
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -87,3 +89,6 @@ class Good(SqlAlchemyBase):
     bought_date = sqlalchemy.Column(sqlalchemy.Date, default=datetime.datetime.now().date())
     # Время эксплуатации (через сколько можно списывать)
     can_be_used = sqlalchemy.Column(sqlalchemy.Integer, default=5)
+
+    def click_row(self):
+        return redirect(f'/edit_item/{self.id}')
