@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Штрих код инвентарного номера</h1>
+    <p>
+        {{image_link}} - {{text}}
+    </p>
+    <img src="{{image_link}}" alt="{{text}}" width="400">
+<!--<div class="col-md6 border rounded">-->
+<!--    <table class="table">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>id</th>-->
+<!--            <th>Название</th>-->
+<!--            <th>Инвентарный номер</th>-->
+<!--            <th>Комментарии</th>-->
+<!--            <th>На балансе</th>-->
+<!--            <th>Статус</th>-->
+<!--            <th>Тип</th>-->
+<!--            <th>Подтип</th>-->
+<!--            <th>Место</th>-->
+<!--            <th>Ответственный</th>-->
+<!--            <th>Дата приобретения</th>-->
+<!--            <th>Время пользования</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        {% for item in goods%}-->
+<!--        <tr>-->
+<!--            <th><a href="/edit_good/{{item.id}}">{{item.id}}</a></th>-->
+<!--            <td>{{item.name}}</td>-->
+<!--            <td><a href="/get_barcode/{{item.invent_number}}">{{item.invent_number}}</a>></td>-->
+<!--            <td>{{item.comment}}</td>-->
+<!--            <td>{{'Да' if item.is_on_balance else 'Нет'}}</td>-->
+<!--            <td>{{ item.status.name }}</td>-->
+<!--            <td>{{ item.item_type.name }}</td>-->
+<!--            <td>{{ item.item_subtype.name }}</td>-->
+<!--            <td>{{ item.location.name }}</td>-->
+<!--            <td>{{ item.responsible.name }}</td>-->
+<!--            <td>{{item.bought_date}}</td>-->
+<!--            <td>{{item.can_be_used}}</td>-->
+
+<!--        </tr>-->
+<!--        {% endfor %}-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+{% endblock %}

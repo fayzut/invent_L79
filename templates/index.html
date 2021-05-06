@@ -25,7 +25,7 @@
         <tr>
             <th><a href="/edit_good/{{item.id}}">{{item.id}}</a></th>
             <td>{{item.name}}</td>
-            <td>{{item.invent_number}}</td>
+            <td><a href="/get_barcode/{{item.invent_number}}">{{item.invent_number}}</a></td>
             <td>{{item.comment}}</td>
             <td>{{'Да' if item.is_on_balance else 'Нет'}}</td>
             <td>{{ item.status.name }}</td>

@@ -5,3 +5,7 @@ wtforms
 flask-login
 werkzeug
 openpyxl
+opencv-python
+pyzbar
+python-barcode
+pytils

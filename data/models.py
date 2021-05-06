@@ -90,5 +90,18 @@ class Good(SqlAlchemyBase):
     # Время эксплуатации (через сколько можно списывать)
     can_be_used = sqlalchemy.Column(sqlalchemy.Integer, default=5)
 
+    # def __init__(self):
+    #     self.name = None
+    #     self.invent_number = None
+    #     self.comment = None
+    #     self.is_on_balance = None
+    #     self.status_id = None
+    #     self.item_type_id = None
+    #     self.item_subtype_id = None
+    #     self.location_id = None
+    #     self.responsible_id = None
+    #     self.bought_date = None
+    #     self.can_be_used = None
+
     def click_row(self):
         return redirect(f'/edit_item/{self.id}')

@@ -1,9 +1,10 @@
+import os
 from datetime import datetime as dt
 
-from flask import Flask, render_template, redirect, request, flash
-from openpyxl import Workbook
+from flask import Flask, render_template, redirect, request
 
 from data import db_session
+from data.barcode_maker import get_barcode_file
 from data.models import *
 from data.my_classes import ImportData
 from forms import LoginForm, NewUser, NewGood, NewLocation, NewItemType, NewItemSubtype, Import
@@ -41,7 +42,6 @@ def load_user(user_id):
 @main_app.route('/index')
 def index():
     db_sess = db_session.create_session()
-    # db_sess.fl
     all_goods = db_sess.query(Good).all()
     return render_template('index.html', title='Главная', goods=all_goods)
 
@@ -68,51 +68,63 @@ def register_user():
                            form=form)
 
 
-@main_app.route('/edit_good/<the_id>', methods=['GET', 'POST'])
 @main_app.route('/new_good', methods=['GET', 'POST'])
+@main_app.route('/edit_good/<the_id>', methods=['GET', 'POST'])
 @login_required
 def edit_good(the_id=None):
-    db_ses = db_session.create_session()
+    db_sess = db_session.create_session()
     item = Good()
     if the_id:
-        item = db_ses.query(Good).filter(Good.id == the_id).first()
+        item = db_sess.query(Good).filter(Good.id == the_id).first()
     form = NewGood()
     form.name.data = item.name
     form.invent_number.data = item.invent_number
     form.comment.data = item.comment
     form.is_on_balance.data = item.is_on_balance
-    form.status_id.choices = get_choises(db_ses, Condition)
+    form.status_id.choices = get_choises(db_sess, Condition)
     form.status_id.default = item.status_id
-    form.item_type_id.choices = get_choises(db_ses, ItemType)
+    form.item_type_id.choices = get_choises(db_sess, ItemType)
     form.item_type_id.default = item.item_type_id
-    form.item_subtype_id.choices = get_choises(db_ses, ItemSubtype)
+    form.item_subtype_id.choices = get_choises(db_sess, ItemSubtype)
     form.item_subtype_id.default = item.item_subtype_id
-    form.location_id.choices = get_choises(db_ses, Location)
+    form.location_id.choices = get_choises(db_sess, Location)
     form.location_id.default = item.location_id
-    form.responsible_id.choices = get_choises(db_ses, User)
+    form.responsible_id.choices = get_choises(db_sess, User)
     form.responsible_id.default = item.responsible_id
     form.bought_date.data = item.bought_date
     form.can_be_used.data = item.can_be_used
     # form.process()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        good = Good()
-        good.name = form.name.data
-        good.invent_number = form.invent_number.data
-        good.comment = form.comment.data
-        good.is_on_balance = form.is_on_balance.data
-        good.status_id = form.status_id.data
-        good.item_type_id = form.item_type_id.data
-        good.item_subtype_id = form.item_subtype_id.data
-        good.location_id = form.location_id.data
-        good.responsible_id = form.responsible_id.data
-        good.bought_date = form.bought_date.data
-        good.can_be_used = form.can_be_used.data
-        db_sess.add(good)
+        item.name = request.form['name']
+        item.invent_number = request.form['invent_number']
+        item.comment = request.form['comment']
+        item.is_on_balance = True if request.form.get('is_on_balance', default=False) else False
+        item.status_id = int(request.form['status_id'])
+        item.item_type_id = int(request.form['item_type_id'])
+        item.item_subtype_id = int(request.form['item_subtype_id'])
+        item.location_id = int(request.form['location_id'])
+        item.responsible_id = int(request.form['responsible_id'])
+        item.bought_date = dt.strptime(request.form['bought_date'], '%d.%m.%Y').date()
+        item.can_be_used = int(request.form['can_be_used'])
+        if the_id:
+            pass
+        else:
+            db_sess.add(item)
         db_sess.commit()
         return redirect('/')
+    title = 'Новая вещь'
+    if the_id:
+        form.submit.label.text = 'Изменить'
+        title = 'Редактирование'
+    return render_template('new_good.html', title=title, form=form)
 
-    return render_template('new_good.html', title='Новая вещь', form=form)
+
+@main_app.route('/get_barcode/<text>', methods=['GET'])
+@login_required
+def get_barcode(text):
+    link = get_barcode_file(text, 'images')
+    print(link)
+    return render_template('barcode.html', text=text, image_link=link)
 
 
 @main_app.route('/new_location', methods=['GET', 'POST'])
