@@ -32,7 +32,7 @@ def draw_barcode(decoded, image):
 if __name__ == "__main__":
     from glob import glob
 
-    barcodes = glob("barcode_1.png")
+    barcodes = glob("../static/images/barcode_*.png")
     for barcode_file in barcodes:
         # load the image to opencv
         img = cv2.imread(barcode_file)
@@ -41,5 +41,5 @@ if __name__ == "__main__":
         img = decode(img)
         # show the image
         cv2.imshow("img", img)
-        cv2.imwrite("barcode_detected.png", img)
+        # cv2.imwrite("barcode_detected.png", img)
         cv2.waitKey(0)
