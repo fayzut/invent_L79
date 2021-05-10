@@ -74,25 +74,27 @@ def register_user():
 def edit_good(the_id=None):
     db_sess = db_session.create_session()
     item = Good()
+    form = NewGood()
     if the_id:
         item = db_sess.query(Good).filter(Good.id == the_id).first()
-    form = NewGood()
-    form.name.data = item.name
-    form.invent_number.data = item.invent_number
-    form.comment.data = item.comment
-    form.is_on_balance.data = item.is_on_balance
+
+        form.name.data = item.name
+        form.invent_number.data = item.invent_number
+        form.comment.data = item.comment
+        form.is_on_balance.data = item.is_on_balance
+        form.status_id.default = item.status_id
+        form.item_type_id.default = item.item_type_id
+        form.item_subtype_id.default = item.item_subtype_id
+        form.location_id.default = item.location_id
+        form.responsible_id.default = item.responsible_id
+        form.bought_date.data = item.bought_date
+        form.can_be_used.data = item.can_be_used
+
     form.status_id.choices = get_choises(db_sess, Condition)
-    form.status_id.default = item.status_id
     form.item_type_id.choices = get_choises(db_sess, ItemType)
-    form.item_type_id.default = item.item_type_id
     form.item_subtype_id.choices = get_choises(db_sess, ItemSubtype)
-    form.item_subtype_id.default = item.item_subtype_id
     form.location_id.choices = get_choises(db_sess, Location)
-    form.location_id.default = item.location_id
     form.responsible_id.choices = get_choises(db_sess, User)
-    form.responsible_id.default = item.responsible_id
-    form.bought_date.data = item.bought_date
-    form.can_be_used.data = item.can_be_used
     # form.process()
     if form.validate_on_submit():
         item.name = request.form['name']
