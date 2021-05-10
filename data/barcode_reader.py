@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from pyzbar import pyzbar
 import cv2
 
@@ -11,10 +13,12 @@ def decode(image):
         image = draw_barcode(obj, image)
         # print barcode type & data
         print("Type:", obj.type)
-        print("Data:", obj.data)
+        data = unquote(str(obj.data[:-1]))
+        print("Data:", data)
+        # print("Data:", obj.data)
         print()
 
-    return image
+    return image, data
 
 
 def draw_barcode(decoded, image):
@@ -23,23 +27,31 @@ def draw_barcode(decoded, image):
     #     image = cv2.line(image, decoded.polygon[i], decoded.polygon[(i+1) % n_points], color=(0, 255, 0), thickness=5)
     # uncomment above and comment below if you want to draw a polygon and not a rectangle
     image = cv2.rectangle(image, (decoded.rect.left, decoded.rect.top),
-                            (decoded.rect.left + decoded.rect.width, decoded.rect.top + decoded.rect.height),
-                            color=(0, 255, 0),
-                            thickness=5)
+                          (decoded.rect.left + decoded.rect.width,
+                           decoded.rect.top + decoded.rect.height),
+                          color=(0, 255, 0),
+                          thickness=5)
     return image
+
+
+def decode_file(link):
+    barcodes = glob(link)
+    for barcode_file in barcodes:
+        # load the image to opencv
+        print(barcode_file)
+        img = cv2.imread(barcode_file)
+        # decode detected barcodes & get the image
+        # that is drawn
+        img, data = decode(img)
+        # show the image
+        # cv2.imshow("img", img)
+        # cv2.imwrite("barcode_detected.png", img)
+        # cv2.waitKey(0)
+        if data:
+            return data
 
 
 if __name__ == "__main__":
     from glob import glob
 
-    barcodes = glob("../static/images/barcode_*.png")
-    for barcode_file in barcodes:
-        # load the image to opencv
-        img = cv2.imread(barcode_file)
-        # decode detected barcodes & get the image
-        # that is drawn
-        img = decode(img)
-        # show the image
-        cv2.imshow("img", img)
-        # cv2.imwrite("barcode_detected.png", img)
-        cv2.waitKey(0)
+    print(decode_file("../static/images/barcode_%D0%A4A00001.png"))

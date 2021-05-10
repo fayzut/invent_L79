@@ -25,9 +25,9 @@ class ImageWriterCyr(ImageWriter):
 
 
 def get_barcode_file(text, folder):
-    filename = os.path.join(folder, f'barcode_{text}.png')
-    # text1 = '{0}'.format(quote(text))
-    text1 = pytils.translit.translify(text)
+    filename = os.path.join(folder, f'barcode_{quote( text)}.png')
+    text1 = f'{quote(text)}'
+    # text1 = pytils.translit.translify(text)
 
     # print(text1)
     with open('static\\' + filename, 'wb') as f:
